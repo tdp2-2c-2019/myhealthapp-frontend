@@ -1,17 +1,32 @@
 import React, { Component } from 'react';
-import { Badge, Card, CardBody, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
+import { Card, CardBody, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
 const axios = require('axios')
 
 class HealthServices extends Component {
-    getServices = async () => {
+    constructor(props) {
+        super(props);
+        this.state = {
+            services: [],
+        }
+    }
+
+    componentDidMount = () => {
+        this.getServices().then(services => {            
+            this.setState({ services: services })
+        })
+    }
+
+    getServices = (offset) => {
         try {
-            return await axios.get('https://myhealthapp-backend.herokuapp.com/api/health-services')
+            return axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services?limit=10&offset=${offset ? offset : 0}`).then(response => {                
+                return response.status === 200 ? response.data : [];
+            })
         } catch (error) {
             console.error(error)
         }
     }
 
-    render() {
+    render() {       
         return (
             <div className="animated fadeIn">
                 <Card>
@@ -22,7 +37,6 @@ class HealthServices extends Component {
                         <Table responsive>
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Plan Minimo</th>
                                     <th>Nombre</th>
                                     <th>Mail</th>
@@ -30,17 +44,14 @@ class HealthServices extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.getServices().then(hs => {
-                                    hs.map(service => {
-                                        return < tr >
-                                            <td>{service.id}</td>
-                                            <td>{service.plan}</td>
-                                            <td>{service.name}</td>
-                                            <td>{service.mail}</td>
-                                            <td>{service.address}</td>
-                                        </tr>
-                                    })}
-                                )})}
+                                {this.state.services.length > 0 && this.state.services.map(service => {
+                                    return (< tr key={service.name} >
+                                        <td>{service.minimum_plan}</td>
+                                        <td>{service.name}</td>
+                                        <td>{service.mail}</td>
+                                        <td>{service.address}</td>
+                                    </tr>)
+                                })}
                             </tbody>
                         </Table>
                         <Pagination>
