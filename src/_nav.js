@@ -39,7 +39,7 @@ export default {
     {
       name: 'Prestadores',
       url: '/health-services',
-      // icon: 'icon-pie-chart',
+      icon: 'icon-list',
     },
     // {
     //   name: 'Base',
