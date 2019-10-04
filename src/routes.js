@@ -1,6 +1,7 @@
 import React from 'react';
 
-const HealthServices = React.lazy(() => import('./views/HealthServices'));
+const AddHealthService = React.lazy(() => import('./views/HealthServices/AddHealthService'));
+const ListHealthServices = React.lazy(() => import('./views/HealthServices/ListHealthServices'));
 const Breadcrumbs = React.lazy(() => import('./views/Base/Breadcrumbs'));
 const Cards = React.lazy(() => import('./views/Base/Cards'));
 const Carousels = React.lazy(() => import('./views/Base/Carousels'));
@@ -40,7 +41,8 @@ const User = React.lazy(() => import('./views/Users/User'));
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/health-services', name: 'Prestadores', component: HealthServices },
+  { path: '/add-health-services', name: 'Agregar prestador', component: AddHealthService },
+  { path: '/health-services', name: 'Prestadores', component: ListHealthServices },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },

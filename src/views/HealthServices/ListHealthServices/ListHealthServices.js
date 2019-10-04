@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardBody, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
 const axios = require('axios')
 
-class HealthServices extends Component {
+class ListHealthServices extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,14 +11,14 @@ class HealthServices extends Component {
     }
 
     componentDidMount = () => {
-        this.getServices().then(services => {            
+        this.getServices().then(services => {
             this.setState({ services: services })
         })
     }
 
     getServices = (offset) => {
         try {
-            return axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services?limit=10&offset=${offset ? offset : 0}`).then(response => {                
+            return axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services?limit=10&offset=${offset ? offset : 0}`).then(response => {
                 return response.status === 200 ? response.data : [];
             })
         } catch (error) {
@@ -26,7 +26,7 @@ class HealthServices extends Component {
         }
     }
 
-    render() {       
+    render() {
         return (
             <div className="animated fadeIn">
                 <Card>
@@ -81,4 +81,4 @@ class HealthServices extends Component {
     }
 }
 
-export default HealthServices;
+export default ListHealthServices;
