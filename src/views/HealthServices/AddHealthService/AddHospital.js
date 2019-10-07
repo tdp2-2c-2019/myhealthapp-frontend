@@ -17,7 +17,6 @@ const axios = require('axios');
 class AddHospital extends Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   getSelectedValues(values) {
@@ -28,7 +27,7 @@ class AddHospital extends Component {
     return result;
   }
 
-  async handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
     const target = event.target;
     const hospital = {
@@ -41,9 +40,8 @@ class AddHospital extends Component {
       languages: this.getSelectedValues(target[6].children)
     };
     event.target.reset();
-    console.log(hospital);
     this.props.onSubmit(hospital, 'https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals');
-  }
+  };
 
   render() {
     return (

@@ -17,7 +17,6 @@ const axios = require('axios');
 class AddDoctor extends Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   getSelectedValues(values) {
@@ -28,7 +27,7 @@ class AddDoctor extends Component {
     return result;
   }
 
-  async handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
     const target = event.target;
     const doctor = {
@@ -42,9 +41,8 @@ class AddDoctor extends Component {
       languages: this.getSelectedValues(target[7].children)
     };
     event.target.reset();
-    console.log(doctor);
     this.props.onSubmit(doctor, 'https://myhealthapp-backend.herokuapp.com/api/health-services/doctors');
-  }
+  };
 
   render() {
     return (
@@ -69,7 +67,7 @@ class AddDoctor extends Component {
               </Col>
               <Col xs="12" md="9">
                 <Input type="email" id="mail-input" name="mail" placeholder="juan@perez.com" autoComplete="email" required/>
-                <FormText className="help-block">Ingrese su mail</FormText>
+                <FormText className="help-block">Ingrese el mail</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -78,7 +76,7 @@ class AddDoctor extends Component {
               </Col>
               <Col xs="12" md="9">
                 <Input type="number" id="telephone-input" name="telephone" placeholder="47395539" required/>
-                <FormText className="help-block">Ingrese su teléfono</FormText>
+                <FormText className="help-block">Ingrese el teléfono</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -87,7 +85,7 @@ class AddDoctor extends Component {
               </Col>
               <Col xs="12" md="9">
                 <Input type="text" id="address-input" name="address" placeholder="Matienzos 345" required/>
-                <FormText color="muted">Ingrese la dirección del prestador</FormText>
+                <FormText color="muted">Ingrese la dirección</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -96,7 +94,7 @@ class AddDoctor extends Component {
               </Col>
               <Col xs="12" md="9">
                 <Input type="text" id="address-notes-input" name="address_notes" placeholder="3 B" required/>
-                <FormText color="muted">Ingrese el piso y/o departamento del prestador</FormText>
+                <FormText color="muted">Ingrese el piso y/o departamento</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -105,7 +103,7 @@ class AddDoctor extends Component {
               </Col>
               <Col xs="12" md="9">
                 <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0" required>
-                  <option value="0" disabled>Por favor elija el plan mínimo</option>
+                  <option value="0" disabled>Elija el plan mínimo requerido</option>
                   {this.props.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{ plan.plan_name }</option>)}
                 </Input>
               </Col>

@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
 import {
   Alert,
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  CardFooter,
-  Col,
-  Form,
-  FormGroup,
-  FormText,
-  Input,
-  Label, Nav, NavItem, NavLink, TabContent, TabPane
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane
 } from "reactstrap";
 import AddDoctor from "./AddDoctor";
 import AddHospital from "./AddHospital";
@@ -29,10 +23,6 @@ class AddHealthServices extends Component {
       languages: [],
       specializations: []
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleAlertDismiss = this.handleAlertDismiss.bind(this);
-    this.toggle = this.toggle.bind(this);
-    this.tabPane = this.tabPane.bind(this);
   }
 
   async componentDidMount() {
@@ -41,53 +31,43 @@ class AddHealthServices extends Component {
       const langReq = await  axios.get('https://myhealthapp-backend.herokuapp.com/api/languages');
       const specReq = await  axios.get('https://myhealthapp-backend.herokuapp.com/api/specializations');
       this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data });
-      console.log(this.state);
     } catch (error) {
-      console.log(error);
       this.setState({ isFailAlertVisible: true, failAlertMessage: 'Error al contactarse con el servidor. Intente nuevamente.'})
     }
   }
 
-  async handleSubmit(healthService, url) {
+  handleSubmit = async (healthService, url) => {
     try {
-      const res = await axios.post(url, healthService);
+      await axios.post(url, healthService);
       this.setState({ isSuccessAlertVisible: true });
-      console.log(res);
     } catch (error) {
       let message = 'Error al crear nuevo prestador: ';
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-        message.concat(`Mensaje del servidor: ${error.response.body}`);
+        message = message.concat(`Mensaje del servidor: ${error.response.statusText}`);
       } else if (error.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.log(error.request);
-        message.concat('No pudo establecerse comunicación con el servidor.');
+        message = message.concat('No pudo establecerse comunicación con el servidor.');
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message);
-        message.concat('No pudo realizarse el pedido al servidor');
+        message = message.concat('No pudo realizarse el pedido al servidor');
       }
-      console.log(error.config);
       this.setState({ isFailAlertVisible: true, failAlertMessage: message });
     }
-  }
+  };
 
-  handleAlertDismiss(alertName) {
-    console.log(alertName);
+  handleAlertDismiss = (alertName) => {
     this.setState({ [alertName]: false});
-  }
+  };
 
-  toggle(tab) {
+  toggle = (tab) => {
     this.setState({ activeTab: tab});
-  }
+  };
 
-  tabPane() {
+  tabPane = () => {
     return (
       <>
         <TabPane tabId={1}>
@@ -108,7 +88,7 @@ class AddHealthServices extends Component {
         </TabPane>
       </>
     );
-  }
+  };
 
   render() {
     return (
