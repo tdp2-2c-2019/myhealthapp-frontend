@@ -1,163 +1,146 @@
 import React, { Component } from 'react';
 import {
-  Button, Card,
+  Alert,
+  Button,
+  Card,
   CardBody,
   CardHeader,
+  CardFooter,
   Col,
   Form,
   FormGroup,
   FormText,
   Input,
-  Label
+  Label, Nav, NavItem, NavLink, TabContent, TabPane
 } from "reactstrap";
+import AddDoctor from "./AddDoctor";
+import AddHospital from "./AddHospital";
 const axios = require('axios');
 
 class AddHealthServices extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeTab: 1,
+      isSuccessAlertVisible: false,
+      isFailAlertVisible: false,
+      failAlertMessage: '',
       plans: [],
       languages: [],
-      specializations: [],
-      doctor: {
-        name: '',
-        email: '',
-        telephone: -1,
-
-      }
+      specializations: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAlertDismiss = this.handleAlertDismiss.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.tabPane = this.tabPane.bind(this);
   }
 
   async componentDidMount() {
     try {
-      const plansReq = await  axios.get('http://localhost:8080/api/plans');
-      const langReq = await  axios.get('http://localhost:8080/api/languages');
-      const specReq = await  axios.get('http://localhost:8080/api/specializations');
+      const plansReq = await  axios.get('https://myhealthapp-backend.herokuapp.com/api/plans');
+      const langReq = await  axios.get('https://myhealthapp-backend.herokuapp.com/api/languages');
+      const specReq = await  axios.get('https://myhealthapp-backend.herokuapp.com/api/specializations');
       this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data });
       console.log(this.state);
     } catch (error) {
-      console.log('Error when getting plans, languages and specializations');
       console.log(error);
+      this.setState({ isFailAlertVisible: true, failAlertMessage: 'Error al contactarse con el servidor. Intente nuevamente.'})
     }
   }
 
-  getSelectedValues(values) {
-    let result = [];
-    values.forEach((value) => {
-      if (value.selected) result.push(value.value);
-    });
-    return result;
+  async handleSubmit(healthService, url) {
+    try {
+      const res = await axios.post(url, healthService);
+      this.setState({ isSuccessAlertVisible: true });
+      console.log(res);
+    } catch (error) {
+      let message = 'Error al crear nuevo prestador: ';
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        message.concat(`Mensaje del servidor: ${error.response.body}`);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+        message.concat('No pudo establecerse comunicación con el servidor.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+        message.concat('No pudo realizarse el pedido al servidor');
+      }
+      console.log(error.config);
+      this.setState({ isFailAlertVisible: true, failAlertMessage: message });
+    }
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    const target = event.target;
-    const doctor = {
-      name: target[0].value,
-      mail: target[1].value,
-      telephone: target[2].value,
-      address: target[3].value,
-      address_notes: target[4].value,
-      minimum_plan: target[5].value,
-      specializations: this.getSelectedValues(target[6].children),
-      languages: this.getSelectedValues(target[7].children)
-    };
-    console.log(doctor);
-    axios.post('http://localhost:8080/api/health-services/doctors', doctor);
+  handleAlertDismiss(alertName) {
+    console.log(alertName);
+    this.setState({ [alertName]: false});
+  }
+
+  toggle(tab) {
+    this.setState({ activeTab: tab});
+  }
+
+  tabPane() {
+    return (
+      <>
+        <TabPane tabId={1}>
+          <AddDoctor
+            plans={this.state.plans}
+            specializations={this.state.specializations}
+            languages={this.state.languages}
+            onSubmit={(healthService, url) => this.handleSubmit(healthService, url)}
+          />
+        </TabPane>
+        <TabPane tabId={2}>
+          <AddHospital
+            plans={this.state.plans}
+            specializations={this.state.specializations}
+            languages={this.state.languages}
+            onSubmit={(healthService, url) => this.handleSubmit(healthService, url)}
+          />
+        </TabPane>
+      </>
+    );
   }
 
   render() {
     return (
-      <Card>
-        <CardHeader>
-          <strong>Agregar prestador</strong>
-        </CardHeader>
-        <CardBody>
-          <Form className="form-horizontal" onSubmit={this.handleSubmit}>
-            <FormGroup row>
-              <Col md="3">
-                <Label htmlFor="text-input">Nombre</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input type="text" id="name-input" name="name" placeholder="Juan Perez"/>
-                <FormText color="muted">Ingrese el nombre completo</FormText>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
-                <Label htmlFor="mail-input">Mail</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input type="email" id="mail-input" name="mail" placeholder="juan@perez.com" autoComplete="email"/>
-                <FormText className="help-block">Ingrese su mail</FormText>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
-                <Label htmlFor="email-input">Teléfono</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input type="number" id="telephone-input" name="telephone" placeholder="47395539"/>
-                <FormText className="help-block">Ingrese su teléfono</FormText>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
-                <Label htmlFor="text-input">Direccion</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input type="text" id="address-input" name="address" placeholder="Matienzos 345" />
-                <FormText color="muted">Ingrese la direccion del prestador</FormText>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
-                <Label htmlFor="text-input">Piso / Departamento</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input type="text" id="address-notes-input" name="address_notes" placeholder="3 B" />
-                <FormText color="muted">Ingrese el piso y/o departamento del prestador</FormText>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
-                <Label htmlFor="select">Plan mínimo</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0">
-                  <option value="0" disabled>Por favor elija el plan mínimo</option>
-                  {this.state.plans.map(plan => <option key={`plan${plan.plan}`}>{ plan.plan_name }</option>)}
-                </Input>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3"><Label>Especialidades</Label></Col>
-              <Col md="9">
-                <Input type="select" name="specialization" id="specialization-select" multiple>
-                  {
-                    this.state.specializations.map(specialization => <option key={`specialization-${specialization.id}`}>{ specialization.name }</option>)
-                  }
-                </Input>
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
-                <Label>Idiomas</Label>
-              </Col>
-              <Col md="9">
-                <Input type="select" name="language" id="language-select" multiple>
-                  {
-                    this.state.languages.map(language => <option key={`language-${language.id}`}>{ language.name }</option>)
-                  }
-                </Input>
-              </Col>
-            </FormGroup>
-            <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o" />Crear</Button>
-            <Button type="reset" size="sm" color="danger"><i className="fa fa-ban" />Cancelar</Button>
-          </Form>
-        </CardBody>
-      </Card>
+      <div className="animated fadeIn">
+        <Alert color="success" isOpen={this.state.isSuccessAlertVisible} name="isSuccessAlertVisible" toggle={() => this.handleAlertDismiss("isSuccessAlertVisible")}>
+          Prestador creado con éxito.
+        </Alert>
+        <Alert color="danger" isOpen={this.state.isFailAlertVisible} name="isFailAlertVisible" toggle={() => this.handleAlertDismiss("isFailAlertVisible")}>
+          {this.state.failAlertMessage}
+        </Alert>
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              active={this.state.activeTab === 1}
+              onClick={() => { this.toggle(1); }}
+            >
+              Agregar Doctor
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              active={this.state.activeTab === 2}
+              onClick={() => { this.toggle(2); }}
+            >
+              Agregar Centro de Salud
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={this.state.activeTab}>
+          {this.tabPane()}
+        </TabContent>
+      </div>
     );
   }
 }

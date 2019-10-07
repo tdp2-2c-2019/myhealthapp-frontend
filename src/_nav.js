@@ -39,7 +39,19 @@ export default {
     {
       name: 'Prestadores',
       url: '/health-services',
-      icon: 'icon-list',
+      icon: 'icon-heart',
+      children: [
+        {
+          name: 'Lista de prestadores',
+          url: '/health-services/list',
+          icon: 'icon-list'
+        },
+        {
+          name: 'Agregar prestador',
+          url: '/health-services/new',
+          icon: 'icon-user-follow'
+        }
+      ]
     },
     // {
     //   name: 'Base',
