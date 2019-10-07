@@ -21,6 +21,7 @@ import {
 import { ButtonDropdowns, ButtonGroups, Buttons, BrandButtons } from './Buttons';
 import Charts from './Charts';
 import Dashboard from './Dashboard';
+import { AddHealthServices, ListHealthServices } from "./HealthServices";
 import { CoreUIIcons, Flags, FontAwesome, SimpleLineIcons } from './Icons';
 import { Alerts, Badges, Modals } from './Notifications';
 import { Login, Page404, Page500, Register } from './Pages';
@@ -49,6 +50,8 @@ export {
   Tabs,
   Tables,
   Charts,
+  AddHealthServices,
+  ListHealthServices,
   Dashboard,
   Widgets,
   Jumbotrons,
