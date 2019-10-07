@@ -18,8 +18,15 @@ class AddHealthServices extends Component {
     this.state = {
       plans: [],
       languages: [],
-      specializations: []
-    }
+      specializations: [],
+      doctor: {
+        name: '',
+        email: '',
+        telephone: -1,
+
+      }
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -30,14 +37,34 @@ class AddHealthServices extends Component {
       this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data });
       console.log(this.state);
     } catch (error) {
-      console.log('Axios error !11');
+      console.log('Error when getting plans, languages and specializations');
       console.log(error);
     }
   }
 
+  getSelectedValues(values) {
+    let result = [];
+    values.forEach((value) => {
+      if (value.selected) result.push(value.value);
+    });
+    return result;
+  }
+
   handleSubmit(event) {
     event.preventDefault();
-    console.log(event.target);
+    const target = event.target;
+    const doctor = {
+      name: target[0].value,
+      mail: target[1].value,
+      telephone: target[2].value,
+      address: target[3].value,
+      address_notes: target[4].value,
+      minimum_plan: target[5].value,
+      specializations: this.getSelectedValues(target[6].children),
+      languages: this.getSelectedValues(target[7].children)
+    };
+    console.log(doctor);
+    axios.post('http://localhost:8080/api/health-services/doctors', doctor);
   }
 
   render() {
@@ -53,17 +80,17 @@ class AddHealthServices extends Component {
                 <Label htmlFor="text-input">Nombre</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="name-input" name="name" placeholder="Juan Perez" />
+                <Input type="text" id="name-input" name="name" placeholder="Juan Perez"/>
                 <FormText color="muted">Ingrese el nombre completo</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col md="3">
-                <Label htmlFor="email-input">Email</Label>
+                <Label htmlFor="mail-input">Mail</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="email" id="email-input" name="email" placeholder="juan@perez.com" autoComplete="email"/>
-                <FormText className="help-block">Ingrese su email</FormText>
+                <Input type="email" id="mail-input" name="mail" placeholder="juan@perez.com" autoComplete="email"/>
+                <FormText className="help-block">Ingrese su mail</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -98,7 +125,7 @@ class AddHealthServices extends Component {
                 <Label htmlFor="select">Plan mínimo</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="select" name="minimum_plan" id="select" defaultValue="0">
+                <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0">
                   <option value="0" disabled>Por favor elija el plan mínimo</option>
                   {this.state.plans.map(plan => <option key={`plan${plan.plan}`}>{ plan.plan_name }</option>)}
                 </Input>
@@ -107,15 +134,11 @@ class AddHealthServices extends Component {
             <FormGroup row>
               <Col md="3"><Label>Especialidades</Label></Col>
               <Col md="9">
-                {
-                  this.state.specializations.map(specialization => {
-                    return <FormGroup key={`spec${specialization.id}`} check className="checkbox">
-                      <Input className="form-check-input" type="checkbox" id={`checkbox${specialization.id}`}
-                             name={`checkbox${specialization.id}`} value={`option${specialization.id}`} />
-                      <Label check className="form-check-label" htmlFor={`checkbox${specialization.id}`}>{ specialization.name }</Label>
-                    </FormGroup>
-                  })
-                }
+                <Input type="select" name="specialization" id="specialization-select" multiple>
+                  {
+                    this.state.specializations.map(specialization => <option key={`specialization-${specialization.id}`}>{ specialization.name }</option>)
+                  }
+                </Input>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -123,14 +146,11 @@ class AddHealthServices extends Component {
                 <Label>Idiomas</Label>
               </Col>
               <Col md="9">
-                {
-                  this.state.languages.map(language => {
-                    return <FormGroup key={`lang${language.id}`} check inline>
-                      <Input className="form-check-input" type="checkbox" id={`inline-checkbox${language.id}`} name={`inline-checkbox${language.id}`} value={`option${language.id}`} />
-                      <Label className="form-check-label" check htmlFor={`inline-checkbox${language.id}`}>{ language.name }</Label>
-                    </FormGroup>
-                  })
-                }
+                <Input type="select" name="language" id="language-select" multiple>
+                  {
+                    this.state.languages.map(language => <option key={`language-${language.id}`}>{ language.name }</option>)
+                  }
+                </Input>
               </Col>
             </FormGroup>
             <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o" />Crear</Button>
