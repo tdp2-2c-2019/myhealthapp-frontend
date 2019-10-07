@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Button, Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Col,
   Form,
@@ -11,8 +10,36 @@ import {
   Input,
   Label
 } from "reactstrap";
+const axios = require('axios');
 
 class AddHealthServices extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      plans: [],
+      languages: [],
+      specializations: []
+    }
+  }
+
+  async componentDidMount() {
+    try {
+      const plansReq = await  axios.get('http://localhost:8080/api/plans');
+      const langReq = await  axios.get('http://localhost:8080/api/languages');
+      const specReq = await  axios.get('http://localhost:8080/api/specializations');
+      this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data });
+      console.log(this.state);
+    } catch (error) {
+      console.log('Axios error !11');
+      console.log(error);
+    }
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    console.log(event.target);
+  }
+
   render() {
     return (
       <Card>
@@ -20,13 +47,13 @@ class AddHealthServices extends Component {
           <strong>Agregar prestador</strong>
         </CardHeader>
         <CardBody>
-          <Form action="" method="post" encType="multipart/form-data" className="form-horizontal">
+          <Form className="form-horizontal" onSubmit={this.handleSubmit}>
             <FormGroup row>
               <Col md="3">
                 <Label htmlFor="text-input">Nombre</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="name-input" name="name-input" placeholder="Juan Perez" />
+                <Input type="text" id="name-input" name="name" placeholder="Juan Perez" />
                 <FormText color="muted">Ingrese el nombre completo</FormText>
               </Col>
             </FormGroup>
@@ -35,17 +62,17 @@ class AddHealthServices extends Component {
                 <Label htmlFor="email-input">Email</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="email" id="email-input" name="email-input" placeholder="juan@perez.com" autoComplete="email"/>
+                <Input type="email" id="email-input" name="email" placeholder="juan@perez.com" autoComplete="email"/>
                 <FormText className="help-block">Ingrese su email</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col md="3">
-                <Label htmlFor="email-input">Telefono</Label>
+                <Label htmlFor="email-input">Teléfono</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="number" id="telephone-input" name="telephone-input" placeholder="47395539"/>
-                <FormText className="help-block">Ingrese su email</FormText>
+                <Input type="number" id="telephone-input" name="telephone" placeholder="47395539"/>
+                <FormText className="help-block">Ingrese su teléfono</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -53,7 +80,7 @@ class AddHealthServices extends Component {
                 <Label htmlFor="text-input">Direccion</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="address-input" name="address-input" placeholder="Matienzos 345" />
+                <Input type="text" id="address-input" name="address" placeholder="Matienzos 345" />
                 <FormText color="muted">Ingrese la direccion del prestador</FormText>
               </Col>
             </FormGroup>
@@ -62,38 +89,33 @@ class AddHealthServices extends Component {
                 <Label htmlFor="text-input">Piso / Departamento</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="address-notes-input" name="address-notes-input" placeholder="3 B" />
+                <Input type="text" id="address-notes-input" name="address_notes" placeholder="3 B" />
                 <FormText color="muted">Ingrese el piso y/o departamento del prestador</FormText>
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col md="3">
-                <Label htmlFor="select">Plan minimo</Label>
+                <Label htmlFor="select">Plan mínimo</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="select" name="select" id="select">
-                  <option value="0">Por favor elija el plan minimo</option>
-                  <option value="1">Plan 1</option>
-                  <option value="2">Plan 2</option>
-                  <option value="3">Plan 3</option>
+                <Input type="select" name="minimum_plan" id="select" defaultValue="0">
+                  <option value="0" disabled>Por favor elija el plan mínimo</option>
+                  {this.state.plans.map(plan => <option key={`plan${plan.plan}`}>{ plan.plan_name }</option>)}
                 </Input>
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col md="3"><Label>Especialidades</Label></Col>
               <Col md="9">
-                <FormGroup check className="checkbox">
-                  <Input className="form-check-input" type="checkbox" id="checkbox1" name="checkbox1" value="option1" />
-                  <Label check className="form-check-label" htmlFor="checkbox1">Clinica</Label>
-                </FormGroup>
-                <FormGroup check className="checkbox">
-                  <Input className="form-check-input" type="checkbox" id="checkbox2" name="checkbox2" value="option2" />
-                  <Label check className="form-check-label" htmlFor="checkbox2">Cardiologia</Label>
-                </FormGroup>
-                <FormGroup check className="checkbox">
-                  <Input className="form-check-input" type="checkbox" id="checkbox3" name="checkbox3" value="option3" />
-                  <Label check className="form-check-label" htmlFor="checkbox3">Nutricion</Label>
-                </FormGroup>
+                {
+                  this.state.specializations.map(specialization => {
+                    return <FormGroup key={`spec${specialization.id}`} check className="checkbox">
+                      <Input className="form-check-input" type="checkbox" id={`checkbox${specialization.id}`}
+                             name={`checkbox${specialization.id}`} value={`option${specialization.id}`} />
+                      <Label check className="form-check-label" htmlFor={`checkbox${specialization.id}`}>{ specialization.name }</Label>
+                    </FormGroup>
+                  })
+                }
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -101,26 +123,20 @@ class AddHealthServices extends Component {
                 <Label>Idiomas</Label>
               </Col>
               <Col md="9">
-                <FormGroup check inline>
-                  <Input className="form-check-input" type="checkbox" id="inline-checkbox1" name="inline-checkbox1" value="option1" />
-                  <Label className="form-check-label" check htmlFor="inline-checkbox1">Espanol</Label>
-                </FormGroup>
-                <FormGroup check inline>
-                  <Input className="form-check-input" type="checkbox" id="inline-checkbox2" name="inline-checkbox2" value="option2" />
-                  <Label className="form-check-label" check htmlFor="inline-checkbox2">Ingles</Label>
-                </FormGroup>
-                <FormGroup check inline>
-                  <Input className="form-check-input" type="checkbox" id="inline-checkbox3" name="inline-checkbox3" value="option3" />
-                  <Label className="form-check-label" check htmlFor="inline-checkbox3">Portugues</Label>
-                </FormGroup>
+                {
+                  this.state.languages.map(language => {
+                    return <FormGroup key={`lang${language.id}`} check inline>
+                      <Input className="form-check-input" type="checkbox" id={`inline-checkbox${language.id}`} name={`inline-checkbox${language.id}`} value={`option${language.id}`} />
+                      <Label className="form-check-label" check htmlFor={`inline-checkbox${language.id}`}>{ language.name }</Label>
+                    </FormGroup>
+                  })
+                }
               </Col>
             </FormGroup>
+            <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o" />Crear</Button>
+            <Button type="reset" size="sm" color="danger"><i className="fa fa-ban" />Cancelar</Button>
           </Form>
         </CardBody>
-        <CardFooter>
-          <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i>Crear</Button>
-          <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i>Cancelar</Button>
-        </CardFooter>
       </Card>
     );
   }
