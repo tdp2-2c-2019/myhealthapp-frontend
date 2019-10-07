@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBody, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
-const axios = require('axios')
+const axios = require('axios');
 
 class ListHealthServices extends Component {
     constructor(props) {
@@ -18,7 +18,7 @@ class ListHealthServices extends Component {
 
     getServices = (offset) => {
         try {
-            return axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services?limit=10&offset=${offset ? offset : 0}`).then(response => {
+            return axios.get('https://myhealthapp-backend.herokuapp.com/api/health-services').then(response => {
                 return response.status === 200 ? response.data : [];
             })
         } catch (error) {
