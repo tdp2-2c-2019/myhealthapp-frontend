@@ -12,6 +12,7 @@ import {
   Input,
   Label
 } from "reactstrap";
+import Search from '../../Search/Search';
 const axios = require('axios');
 
 class AddDoctor extends Component {
@@ -29,7 +30,7 @@ class AddDoctor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const target = event.target;
+    const target = event.target;    
     const doctor = {
       name: target[0].value,
       mail: target[1].value,
@@ -84,7 +85,8 @@ class AddDoctor extends Component {
                 <Label htmlFor="text-input">Dirección</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="address-input" name="address" placeholder="Matienzos 345" required/>
+                {/* <Input type="text" id="address-input" name="address" placeholder="Matienzos 345" required/> */}
+                <Search></Search>
                 <FormText color="muted">Ingrese la dirección</FormText>
               </Col>
             </FormGroup>
