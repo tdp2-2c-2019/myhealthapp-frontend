@@ -12,11 +12,15 @@ import {
   Label
 } from "reactstrap";
 import CardFooter from "reactstrap/es/CardFooter";
-const axios = require('axios');
+import Search from '../../Search/Search';
 
 class AddHospital extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      lat: null,
+      lon: null,
+    }; 
   }
 
   getSelectedValues(values) {
@@ -26,6 +30,13 @@ class AddHospital extends Component {
     });
     return result;
   }
+
+  setLatAndLon = (addressGeometry) => {
+    this.setState({
+      lat: addressGeometry.location.lat(),
+      lon: addressGeometry.location.lng(),
+    });
+  };
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -37,7 +48,9 @@ class AddHospital extends Component {
       address: target[3].value,
       minimum_plan: target[4].value,
       specializations: this.getSelectedValues(target[5].children),
-      languages: this.getSelectedValues(target[6].children)
+      languages: this.getSelectedValues(target[6].children),
+      lat: this.state.lat,
+      lon: this.state.lon,
     };
     event.target.reset();
     this.props.onSubmit(hospital, 'https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals');
@@ -83,7 +96,7 @@ class AddHospital extends Component {
                 <Label htmlFor="text-input">Dirección</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="address-input" name="address" placeholder="Av. Rivadavia 1000" required/>
+                <Search onSelect={this.setLatAndLon} id={'hospital-autocomplete'}></Search>
                 <FormText color="muted">Ingrese la dirección del centro de salud</FormText>
               </Col>
             </FormGroup>

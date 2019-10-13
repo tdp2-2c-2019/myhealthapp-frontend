@@ -13,11 +13,14 @@ import {
   Label
 } from "reactstrap";
 import Search from '../../Search/Search';
-const axios = require('axios');
 
 class AddDoctor extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      lat: null,
+      lon: null,
+    }; 
   }
 
   getSelectedValues(values) {
@@ -27,6 +30,13 @@ class AddDoctor extends Component {
     });
     return result;
   }
+
+  setLatAndLon = (addressGeometry) => {    
+    this.setState({
+      lat: addressGeometry.location.lat(),
+      lon: addressGeometry.location.lng(),
+    });
+  };
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -39,7 +49,9 @@ class AddDoctor extends Component {
       address_notes: target[4].value,
       minimum_plan: target[5].value,
       specializations: this.getSelectedValues(target[6].children),
-      languages: this.getSelectedValues(target[7].children)
+      languages: this.getSelectedValues(target[7].children),
+      lat: this.state.lat,
+      lon: this.state.lon,
     };
     event.target.reset();
     this.props.onSubmit(doctor, 'https://myhealthapp-backend.herokuapp.com/api/health-services/doctors');
@@ -85,8 +97,7 @@ class AddDoctor extends Component {
                 <Label htmlFor="text-input">Dirección</Label>
               </Col>
               <Col xs="12" md="9">
-                {/* <Input type="text" id="address-input" name="address" placeholder="Matienzos 345" required/> */}
-                <Search></Search>
+                <Search onSelect={this.setLatAndLon} id={'doctor-autocomplete'}></Search>
                 <FormText color="muted">Ingrese la dirección</FormText>
               </Col>
             </FormGroup>

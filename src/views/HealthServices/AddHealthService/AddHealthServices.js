@@ -39,6 +39,7 @@ class AddHealthServices extends Component {
   handleSubmit = async (healthService, url) => {
     try {
       await axios.post(url, healthService);
+      window.scrollTo({ top: 0, behavior: 'smooth'});
       this.setState({ isSuccessAlertVisible: true });
     } catch (error) {
       let message = 'Error al crear nuevo prestador: ';
