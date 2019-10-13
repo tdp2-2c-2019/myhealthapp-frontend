@@ -7,6 +7,8 @@ import { Input } from 'reactstrap';
 // Import React Scrit Libraray to load Google object
 import Script from 'react-load-script';
 
+const axios = require('axios');
+
 class Search extends Component {
     // Define Constructor
     constructor(props) {
@@ -20,6 +22,11 @@ class Search extends Component {
         this.handleScriptLoad = this.handleScriptLoad.bind(this);
         this.handlePlaceSelect = this.handlePlaceSelect.bind(this);
     }
+
+    getAPIKey = async () => {
+        const response = await axios.get('https://myhealthapp-backend.herokuapp.com/api/search-key');
+        return response.data.key;
+    };
 
     handleScriptLoad() {
         // Declare Options For Autocomplete
@@ -67,7 +74,7 @@ class Search extends Component {
         return (
             <div>
                 <Script
-                    url={`https://maps.googleapis.com/maps/api/js?key=AIzaSyA5NfHs-H_DMXjw95fx0upHdi2irK08Nqw&libraries=places`}
+                    url={`https://maps.googleapis.com/maps/api/js?key=${this.getAPIKey()}&libraries=places`}
                     onLoad={this.handleScriptLoad}
                 />
                 <Input type="text" id={this.props.id} name="address" placeholder="Matienzos 345" required />
