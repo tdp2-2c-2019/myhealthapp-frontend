@@ -17,14 +17,21 @@ class Search extends Component {
         // Declare State
         this.state = {
             query: '',
+            APIKey: null,
         };
         // Bind Functions
         this.handleScriptLoad = this.handleScriptLoad.bind(this);
         this.handlePlaceSelect = this.handlePlaceSelect.bind(this);
     }
 
+    componentDidMount() {
+        this.getAPIKey().then(key => {
+            this.setState({APIKey: key});
+        })
+    }
+
     getAPIKey = async () => {
-        const response = await axios.get('https://myhealthapp-backend.herokuapp.com/api/search-key');
+        const response = await axios.get('https://myhealthapp-backend.herokuapp.com/api/search-key');        
         return response.data.key;
     };
 
@@ -71,10 +78,10 @@ class Search extends Component {
     };
 
     render() {
-        return (
+        return this.state.APIKey && (
             <div>
                 <Script
-                    url={`https://maps.googleapis.com/maps/api/js?key=${this.getAPIKey()}&libraries=places`}
+                    url={`https://maps.googleapis.com/maps/api/js?key=${this.state.APIKey}&libraries=places`}
                     onLoad={this.handleScriptLoad}
                 />
                 <Input type="text" id={this.props.id} name="address" placeholder="Matienzos 345" required />
