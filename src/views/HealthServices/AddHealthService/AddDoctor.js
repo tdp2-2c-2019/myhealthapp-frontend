@@ -40,7 +40,7 @@ class AddDoctor extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const target = event.target;    
+    const target = event.target;
     const doctor = {
       name: target[0].value,
       mail: target[1].value,
