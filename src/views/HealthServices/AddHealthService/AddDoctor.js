@@ -12,11 +12,16 @@ import {
   Input,
   Label
 } from "reactstrap";
-const axios = require('axios');
+import Search from '../../Search/Search';
 
 class AddDoctor extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      lat: null,
+      lon: null,
+      zone: null,
+    }; 
   }
 
   getSelectedValues(values) {
@@ -26,6 +31,14 @@ class AddDoctor extends Component {
     });
     return result;
   }
+
+  setLatLonAndZone = (address) => {    
+    this.setState({
+      lat: address.geometry.location.lat(),
+      lon: address.geometry.location.lng(),
+      zone: address.address_components.filter(component => component.types.some((text) => text === 'sublocality' || text === 'locality'))[0].long_name
+    });
+  };
 
   handleSubmit = (event) => {
     event.preventDefault();
@@ -38,7 +51,10 @@ class AddDoctor extends Component {
       address_notes: target[4].value,
       minimum_plan: target[5].value,
       specializations: this.getSelectedValues(target[6].children),
-      languages: this.getSelectedValues(target[7].children)
+      languages: this.getSelectedValues(target[7].children),
+      lat: this.state.lat,
+      lon: this.state.lon,
+      zone: this.state.zone,
     };
     event.target.reset();
     this.props.onSubmit(doctor, 'https://myhealthapp-backend.herokuapp.com/api/health-services/doctors');
@@ -84,7 +100,7 @@ class AddDoctor extends Component {
                 <Label htmlFor="text-input">Dirección</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="address-input" name="address" placeholder="Matienzos 345" required/>
+                <Search onSelect={this.setLatLonAndZone} id={'doctor-autocomplete'}/>
                 <FormText color="muted">Ingrese la dirección</FormText>
               </Col>
             </FormGroup>
