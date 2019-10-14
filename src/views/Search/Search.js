@@ -10,18 +10,13 @@ import Script from 'react-load-script';
 const axios = require('axios');
 
 class Search extends Component {
-    // Define Constructor
     constructor(props) {
         super(props);
 
-        // Declare State
         this.state = {
             query: '',
             APIKey: null,
         };
-        // Bind Functions
-        this.handleScriptLoad = this.handleScriptLoad.bind(this);
-        this.handlePlaceSelect = this.handlePlaceSelect.bind(this);
     }
 
     componentDidMount() {
@@ -35,9 +30,9 @@ class Search extends Component {
         return response.data.key;
     };
 
-    handleScriptLoad() {
+    handleScriptLoad = () => {
         // Declare Options For Autocomplete
-        var options = {
+        let options = {
             // types: ['(address)'],
         };
 
@@ -50,16 +45,16 @@ class Search extends Component {
         // Avoid paying for data that you don't need by restricting the set of
         // place fields that are returned to just the address components, formatted
         // address and geometry.
-        this.autocomplete.setFields(['formatted_address', 'geometry']);
+        this.autocomplete.setFields(['formatted_address', 'geometry', 'address_components']);
 
         // Fire Event when a suggested name is selected
         this.autocomplete.addListener('place_changed', this.handlePlaceSelect);
     }
 
-    handlePlaceSelect() {
+    handlePlaceSelect = () => {
         const addressObject = this.autocomplete.getPlace();
         const address = addressObject.address_components;
-        this.props.onSelect(addressObject.geometry)
+        this.props.onSelect(addressObject)
         // Check if address is valid
         if (address) {
             // Set State

@@ -20,6 +20,7 @@ class AddHospital extends Component {
     this.state = {
       lat: null,
       lon: null,
+      zone: null,
     }; 
   }
 
@@ -31,10 +32,11 @@ class AddHospital extends Component {
     return result;
   }
 
-  setLatAndLon = (addressGeometry) => {
+  setLatLonAndZone = (address) => {
     this.setState({
-      lat: addressGeometry.location.lat(),
-      lon: addressGeometry.location.lng(),
+      lat: address.geometry.location.lat(),
+      lon: address.geometry.location.lng(),
+      zone: address.address_components.filter(component => component.types.some((text) => text === 'sublocality' || text === 'locality'))[0].long_name
     });
   };
 
@@ -51,6 +53,7 @@ class AddHospital extends Component {
       languages: this.getSelectedValues(target[6].children),
       lat: this.state.lat,
       lon: this.state.lon,
+      zone: this.state.zone,
     };
     event.target.reset();
     this.props.onSubmit(hospital, 'https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals');
@@ -96,7 +99,7 @@ class AddHospital extends Component {
                 <Label htmlFor="text-input">Dirección</Label>
               </Col>
               <Col xs="12" md="9">
-                <Search onSelect={this.setLatAndLon} id={'hospital-autocomplete'}></Search>
+                <Search onSelect={this.setLatLonAndZone} id={'hospital-autocomplete'}/>
                 <FormText color="muted">Ingrese la dirección del centro de salud</FormText>
               </Col>
             </FormGroup>
