@@ -18,7 +18,6 @@ class MapWrapper extends Component {
   }
 
   onMarkerClick = (props, marker, e) => {
-    console.log(`${this.props.lat}, ${this.props.lon}`);
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
@@ -42,13 +41,12 @@ class MapWrapper extends Component {
         zoom={14}
         style={mapStyles}
         initialCenter={ { lat: -34.6175, lng: -58.3683 } }
-        center={{ lat: this.props.lat, lng: this.props.lon }}
+        center={ { lat: this.props.lat, lng: this.props.lon } }
       >
         <Marker
-          lat={this.props.lat}
-          lng={this.props.lon}
-          onClick={this.onMarkerClick}
-          name="Direccion prestador"
+          position={ { lat: this.props.lat, lng: this.props.lon } }
+          // onClick={this.onMarkerClick}
+          // name="Direccion prestador"
         />
       </Map>
     );

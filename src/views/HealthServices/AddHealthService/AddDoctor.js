@@ -53,7 +53,6 @@ class AddDoctor extends Component {
       lon: address.geometry.location.lng(),
       zone: address.address_components.filter(component => component.types.some((text) => text === 'sublocality' || text === 'locality'))[0].long_name
     });
-    console.log(`${this.state.lat}, ${this.state.lon}`);
   };
 
   handleSubmit = (event) => {
