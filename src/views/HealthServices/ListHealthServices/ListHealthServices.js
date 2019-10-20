@@ -7,14 +7,17 @@ class ListHealthServices extends Component {
         super(props);
         this.state = {
             services: [],
+            currentPage: 0,
+            pageSize: 9,
+            pagesCount: 0
         }
     }
 
     componentDidMount = () => {
         this.getServices().then(services => {
-            this.setState({ services: services })
+            this.setState({ services: services, pagesCount: Math.ceil(services.length / this.state.pageSize) })
         })
-    }
+    };
 
     getServices = (offset) => {
         try {
@@ -24,17 +27,20 @@ class ListHealthServices extends Component {
         } catch (error) {
             console.error(error)
         }
-    }
+    };
+
+    handleClick = (e, index) => {
+        e.preventDefault();
+        this.setState({ currentPage: index });
+    };
 
     render() {
+        const { currentPage, pagesCount, pageSize, services } = this.state;
         return (
             <div className="animated fadeIn">
                 <Card>
-                    {/* <CardHeader>
-                        <i className="fa fa-align-justify"></i> Simple Table
-              </CardHeader> */}
                     <CardBody>
-                        <Table responsive>
+                        <Table responsive hover>
                             <thead>
                                 <tr>
                                     <th>Plan Minimo</th>
@@ -44,34 +50,31 @@ class ListHealthServices extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.services.length > 0 && this.state.services.map(service => {
-                                    return (< tr key={service.name} >
-                                        <td>{service.minimum_plan}</td>
-                                        <td>{service.name}</td>
-                                        <td>{service.mail}</td>
-                                        <td>{service.address}</td>
-                                    </tr>)
+                                {services.length > 0 && 
+                                    services.slice(currentPage * pageSize, (currentPage + 1) * pageSize).map(service => {
+                                    return (
+                                        <tr key={service.name} >
+                                            <td>{service.minimum_plan}</td>
+                                            <td>{service.name}</td>
+                                            <td>{service.mail}</td>
+                                            <td>{service.address}</td>
+                                        </tr>)
                                 })}
                             </tbody>
                         </Table>
                         <Pagination>
-                            <PaginationItem>
-                                <PaginationLink previous tag="button"></PaginationLink>
+                            <PaginationItem disabled={currentPage <= 0}>
+                                <PaginationLink href="#" previous tag="button" onClick={e => this.handleClick(e, currentPage - 1)} />
                             </PaginationItem>
-                            <PaginationItem active>
-                                <PaginationLink tag="button">1</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink tag="button">2</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink tag="button">3</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink tag="button">4</PaginationLink>
-                            </PaginationItem>
-                            <PaginationItem>
-                                <PaginationLink next tag="button"></PaginationLink>
+                                {[...Array(pagesCount)].map((page, i) => 
+                                    <PaginationItem active={i === currentPage} key={i}>
+                                        <PaginationLink onClick={e => this.handleClick(e, i)} href="#">
+                                            {i + 1}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                )}
+                            <PaginationItem disabled={currentPage >= pagesCount - 1}>
+                                <PaginationLink href="#" next tag="button" onClick={e => this.handleClick(e, currentPage + 1)} />
                             </PaginationItem>
                         </Pagination>
                     </CardBody>
