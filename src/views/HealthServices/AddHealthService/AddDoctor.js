@@ -77,108 +77,106 @@ class AddDoctor extends Component {
 
   render() {
     return (
-      <div>
-        <Card>
-          <CardHeader>
-            <strong>Ingrese los datos del doctor</strong>
-          </CardHeader>
-          <CardBody>
-            <Form id="doctor-form" className="form-horizontal" onSubmit={this.handleSubmit}>
-              <FormGroup row>
-                <Col md="3">
-                  <Label htmlFor="text-input">Nombre</Label>
-                </Col>
-                <Col xs="12" md="9">
-                  <Input type="text" id="name-input" name="name" placeholder="Juan Perez" required />
-                  <FormText color="muted">Ingrese el nombre completo</FormText>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md="3">
-                  <Label htmlFor="mail-input">Mail</Label>
-                </Col>
-                <Col xs="12" md="9">
-                  <Input type="email" id="mail-input" name="mail" placeholder="juan@perez.com" autoComplete="email" required />
-                  <FormText className="help-block">Ingrese el mail</FormText>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md="3">
-                  <Label htmlFor="email-input">Teléfono</Label>
-                </Col>
-                <Col xs="12" md="9">
-                  <Input type="number" id="telephone-input" name="telephone" placeholder="47395539" required />
-                  <FormText className="help-block">Ingrese el teléfono</FormText>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md="3">
-                  <Label htmlFor="text-input">Dirección</Label>
-                </Col>
-                <Col xs="12" md="9">
-                  <Search onSelect={this.setLatLonAndZone} id={'doctor-autocomplete'} />
-                  <FormText color="muted">Ingrese la dirección</FormText>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md="3">
-                  <Label htmlFor="text-input">Piso / Departamento</Label>
-                </Col>
-                <Col xs="12" md="9">
-                  <Input type="text" id="address-notes-input" name="address_notes" placeholder="3 B" required />
-                  <FormText color="muted">Ingrese el piso y/o departamento</FormText>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md="3">
-                  <Label htmlFor="select">Plan mínimo</Label>
-                </Col>
-                <Col xs="12" md="9">
-                  <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0" required>
-                    <option value="0" disabled>Elija el plan mínimo requerido</option>
-                    {this.props.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{plan.plan_name}</option>)}
-                  </Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md="3"><Label>Especializaciones</Label></Col>
-                <Col md="9">
-                  <Input type="select" name="specialization" id="specialization-select" multiple required>
-                    {
-                      this.props.specializations.map(specialization => <option key={`specialization-${specialization.id}`}>{specialization.name}</option>)
-                    }
-                  </Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md="3">
-                  <Label>Idiomas</Label>
-                </Col>
-                <Col md="9">
-                  <Input type="select" name="language" id="language-select" multiple required>
-                    {
-                      this.props.languages.map(language => <option key={`language-${language.id}`}>{language.name}</option>)
-                    }
-                  </Input>
-                </Col>
-              </FormGroup>
-              {/* <FormGroup row>
-                <Col md="3">
-                  <Label>Mapa</Label>
-                </Col>
-                <Col md="9" style={{height: '300px'}}>
-                  {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat="-34.6175" lon="-58.3683" styles={{height:'200px'}}/>}
-                </Col>
-              </FormGroup> */}
-            </Form>
-          </CardBody>
-          <CardFooter>
-            <Button type="submit" color="primary" form="doctor-form"><i className="fa fa-dot-circle-o" /> Crear</Button>
-            {' '}
-            <Button type="reset" color="danger" form="doctor-form"><i className="fa fa-ban" /> Cancelar</Button>
-          </CardFooter>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader>
+          <strong>Ingrese los datos del doctor</strong>
+        </CardHeader>
+        <CardBody>
+          <Form id="doctor-form" className="form-horizontal" onSubmit={this.handleSubmit}>
+            <FormGroup row>
+              <Col md="3">
+                <Label htmlFor="text-input">Nombre</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Input type="text" id="name-input" name="name" placeholder="Juan Perez" required />
+                <FormText color="muted">Ingrese el nombre completo</FormText>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label htmlFor="mail-input">Mail</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Input type="email" id="mail-input" name="mail" placeholder="juan@perez.com" autoComplete="email" required />
+                <FormText className="help-block">Ingrese el mail</FormText>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label htmlFor="email-input">Teléfono</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Input type="number" id="telephone-input" name="telephone" placeholder="47395539" required />
+                <FormText className="help-block">Ingrese el teléfono</FormText>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label htmlFor="text-input">Dirección</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Search onSelect={this.setLatLonAndZone} id={'doctor-autocomplete'} />
+                <FormText color="muted">Ingrese la dirección</FormText>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label htmlFor="text-input">Piso / Departamento</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Input type="text" id="address-notes-input" name="address_notes" placeholder="3 B" required />
+                <FormText color="muted">Ingrese el piso y/o departamento</FormText>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label htmlFor="select">Plan mínimo</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0" required>
+                  <option value="0" disabled>Elija el plan mínimo requerido</option>
+                  {this.props.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{plan.plan_name}</option>)}
+                </Input>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3"><Label>Especializaciones</Label></Col>
+              <Col md="9">
+                <Input type="select" name="specialization" id="specialization-select" multiple required>
+                  {
+                    this.props.specializations.map(specialization => <option key={`specialization-${specialization.id}`}>{specialization.name}</option>)
+                  }
+                </Input>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label>Idiomas</Label>
+              </Col>
+              <Col md="9">
+                <Input type="select" name="language" id="language-select" multiple required>
+                  {
+                    this.props.languages.map(language => <option key={`language-${language.id}`}>{language.name}</option>)
+                  }
+                </Input>
+              </Col>
+            </FormGroup>
+            {/* <FormGroup row>
+              <Col md="3">
+                <Label>Mapa</Label>
+              </Col>
+              <Col md="9" style={{height: '300px'}}>
+                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat="-34.6175" lon="-58.3683" styles={{height:'200px'}}/>}
+              </Col>
+            </FormGroup> */}
+          </Form>
+        </CardBody>
+        <CardFooter>
+          <Button type="submit" color="primary" form="doctor-form"><i className="fa fa-dot-circle-o" /> Crear</Button>
+          {' '}
+          <Button type="reset" color="danger" form="doctor-form"><i className="fa fa-ban" /> Cancelar</Button>
+        </CardFooter>
+      </Card>
     );
   }
 }
