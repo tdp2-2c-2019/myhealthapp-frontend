@@ -21,8 +21,8 @@ class AddDoctor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lat: null,
-      lon: null,
+      lat: -34.6175,
+      lon: -58.3683,
       zone: null,
       APIKey: null,
     }; 
