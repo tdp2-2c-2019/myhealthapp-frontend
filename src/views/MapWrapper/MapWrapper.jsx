@@ -41,11 +41,14 @@ class MapWrapper extends Component {
         google={this.props.google}
         zoom={14}
         style={mapStyles}
-        initialCenter={{ lat: this.props.lat, lng: this.props.lon }}
+        initialCenter={ { lat: -34.6175, lng: -58.3683 } }
+        center={{ lat: this.props.lat, lng: this.props.lon }}
       >
         <Marker
-          // onClick={this.onMarkerClick}
-          // name={this.props.markerText}
+          lat={this.props.lat}
+          lng={this.props.lon}
+          onClick={this.onMarkerClick}
+          name="Direccion prestador"
         />
       </Map>
     );
