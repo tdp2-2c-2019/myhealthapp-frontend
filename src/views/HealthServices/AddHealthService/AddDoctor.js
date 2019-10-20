@@ -167,7 +167,7 @@ class AddDoctor extends Component {
                   <Label>Mapa</Label>
                 </Col>
                 <Col md="9" style={{height: '300px'}}>
-                    {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} styles={{height:'200px'}}/>}
+                  {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat="-34.6175" lon="-58.3683" styles={{height:'200px'}}/>}
                 </Col>
               </FormGroup>
             </Form>

@@ -8,17 +8,42 @@ const mapStyles = {
 };
 
 class MapWrapper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showingInfoWindow: false, // Hides or the shows the infoWindow
+      activeMarker: {}, // Shows the active marker upon click
+      selectedPlace: {}, // Shows the infoWindow to the selected place upon a marker
+    };
+  }
+
+  onMarkerClick = (props, marker, e) =>
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true
+    });
+
+  onClose = props => {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null
+      });
+    }
+  };
+
   render() {
     return (
       <Map
         google={this.props.google}
         zoom={14}
         style={mapStyles}
-        initialCenter={{ lat: -34.61, lng: -58.36 }}
+        initialCenter={{ lat: this.props.lat, lng: this.props.lon }}
       >
         <Marker
-          onClick={this.onMarkerClick}
-          name="Kenyatta International Convention Centre"
+          // onClick={this.onMarkerClick}
+          // name={this.props.markerText}
         />
       </Map>
     );

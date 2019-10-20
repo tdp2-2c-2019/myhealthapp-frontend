@@ -13,6 +13,9 @@ import {
 } from "reactstrap";
 import CardFooter from "reactstrap/es/CardFooter";
 import Search from '../../Search/Search';
+import MapWrapper from '../../MapWrapper/MapWrapper';
+
+const axios = require('axios');
 
 class AddHospital extends Component {
   constructor(props) {
@@ -23,6 +26,17 @@ class AddHospital extends Component {
       zone: null,
     }; 
   }
+
+  componentDidMount() {
+    this.getAPIKey().then(key => {
+      this.setState({ APIKey: key });
+    })
+  }
+
+  getAPIKey = async () => {
+    const response = await axios.get('https://myhealthapp-backend.herokuapp.com/api/search-key');
+    return response.data.key;
+  };
 
   getSelectedValues(values) {
     let result = [];
@@ -136,6 +150,14 @@ class AddHospital extends Component {
                 </Input>
               </Col>
             </FormGroup>
+            {/* <FormGroup row>
+              <Col md="3">
+                <Label>Mapa</Label>
+              </Col>
+              <Col md="9" style={{ height: '300px' }}>
+                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} styles={{ height: '200px' }} />}
+              </Col>
+            </FormGroup> */}
           </Form>
         </CardBody>
         <CardFooter>
