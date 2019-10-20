@@ -17,13 +17,14 @@ class MapWrapper extends Component {
     };
   }
 
-  onMarkerClick = (props, marker, e) =>
+  onMarkerClick = (props, marker, e) => {
     console.log(`${this.props.lat}, ${this.props.lon}`);
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true
     });
+  };
 
   onClose = props => {
     if (this.state.showingInfoWindow) {
