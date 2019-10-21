@@ -17,12 +17,13 @@ class MapWrapper extends Component {
     };
   }
 
-  onMarkerClick = (props, marker, e) =>
+  onMarkerClick = (props, marker, e) => {
     this.setState({
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true
     });
+  };
 
   onClose = props => {
     if (this.state.showingInfoWindow) {
@@ -39,11 +40,13 @@ class MapWrapper extends Component {
         google={this.props.google}
         zoom={14}
         style={mapStyles}
-        initialCenter={{ lat: this.props.lat, lng: this.props.lon }}
+        initialCenter={ { lat: -34.6175, lng: -58.3683 } }
+        center={ { lat: this.props.lat, lng: this.props.lon } }
       >
         <Marker
+          position={ { lat: this.props.lat, lng: this.props.lon } }
           // onClick={this.onMarkerClick}
-          // name={this.props.markerText}
+          // name="Direccion prestador"
         />
       </Map>
     );

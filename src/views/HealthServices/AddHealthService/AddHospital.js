@@ -21,8 +21,8 @@ class AddHospital extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lat: null,
-      lon: null,
+      lat: -34.6175,
+      lon: -58.3683,
       zone: null,
     }; 
   }
@@ -150,14 +150,14 @@ class AddHospital extends Component {
                 </Input>
               </Col>
             </FormGroup>
-            {/* <FormGroup row>
+            <FormGroup row>
               <Col md="3">
                 <Label>Mapa</Label>
               </Col>
               <Col md="9" style={{ height: '300px' }}>
-                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} styles={{ height: '200px' }} />}
+                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={this.state.lat} lon={this.state.lon} styles={{ height: '200px' }} />}
               </Col>
-            </FormGroup> */}
+            </FormGroup>
           </Form>
         </CardBody>
         <CardFooter>
