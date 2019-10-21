@@ -13,16 +13,31 @@ import {
   Label
 } from "reactstrap";
 import Search from '../../Search/Search';
+import MapWrapper from '../../MapWrapper/MapWrapper';
+
+const axios = require('axios');
 
 class AddDoctor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lat: null,
-      lon: null,
+      lat: -34.6175,
+      lon: -58.3683,
       zone: null,
+      APIKey: null,
     }; 
   }
+
+  componentDidMount() {
+    this.getAPIKey().then(key => {
+      this.setState({ APIKey: key });
+    })
+  }
+
+  getAPIKey = async () => {
+    const response = await axios.get('https://myhealthapp-backend.herokuapp.com/api/search-key');
+    return response.data.key;
+  };
 
   getSelectedValues(values) {
     let result = [];
@@ -73,7 +88,7 @@ class AddDoctor extends Component {
                 <Label htmlFor="text-input">Nombre</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="name-input" name="name" placeholder="Juan Perez" required/>
+                <Input type="text" id="name-input" name="name" placeholder="Juan Perez" required />
                 <FormText color="muted">Ingrese el nombre completo</FormText>
               </Col>
             </FormGroup>
@@ -82,7 +97,7 @@ class AddDoctor extends Component {
                 <Label htmlFor="mail-input">Mail</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="email" id="mail-input" name="mail" placeholder="juan@perez.com" autoComplete="email" required/>
+                <Input type="email" id="mail-input" name="mail" placeholder="juan@perez.com" autoComplete="email" required />
                 <FormText className="help-block">Ingrese el mail</FormText>
               </Col>
             </FormGroup>
@@ -91,7 +106,7 @@ class AddDoctor extends Component {
                 <Label htmlFor="email-input">Teléfono</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="number" id="telephone-input" name="telephone" placeholder="47395539" required/>
+                <Input type="number" id="telephone-input" name="telephone" placeholder="47395539" required />
                 <FormText className="help-block">Ingrese el teléfono</FormText>
               </Col>
             </FormGroup>
@@ -100,7 +115,7 @@ class AddDoctor extends Component {
                 <Label htmlFor="text-input">Dirección</Label>
               </Col>
               <Col xs="12" md="9">
-                <Search onSelect={this.setLatLonAndZone} id={'doctor-autocomplete'}/>
+                <Search onSelect={this.setLatLonAndZone} id={'doctor-autocomplete'} />
                 <FormText color="muted">Ingrese la dirección</FormText>
               </Col>
             </FormGroup>
@@ -109,7 +124,7 @@ class AddDoctor extends Component {
                 <Label htmlFor="text-input">Piso / Departamento</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="address-notes-input" name="address_notes" placeholder="3 B" required/>
+                <Input type="text" id="address-notes-input" name="address_notes" placeholder="3 B" required />
                 <FormText color="muted">Ingrese el piso y/o departamento</FormText>
               </Col>
             </FormGroup>
@@ -120,7 +135,7 @@ class AddDoctor extends Component {
               <Col xs="12" md="9">
                 <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0" required>
                   <option value="0" disabled>Elija el plan mínimo requerido</option>
-                  {this.props.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{ plan.plan_name }</option>)}
+                  {this.props.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{plan.plan_name}</option>)}
                 </Input>
               </Col>
             </FormGroup>
@@ -129,7 +144,7 @@ class AddDoctor extends Component {
               <Col md="9">
                 <Input type="select" name="specialization" id="specialization-select" multiple required>
                   {
-                    this.props.specializations.map(specialization => <option key={`specialization-${specialization.id}`}>{ specialization.name }</option>)
+                    this.props.specializations.map(specialization => <option key={`specialization-${specialization.id}`}>{specialization.name}</option>)
                   }
                 </Input>
               </Col>
@@ -141,9 +156,17 @@ class AddDoctor extends Component {
               <Col md="9">
                 <Input type="select" name="language" id="language-select" multiple required>
                   {
-                    this.props.languages.map(language => <option key={`language-${language.id}`}>{ language.name }</option>)
+                    this.props.languages.map(language => <option key={`language-${language.id}`}>{language.name}</option>)
                   }
                 </Input>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label>Mapa</Label>
+              </Col>
+              <Col md="9" style={{height: '300px'}}>
+                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={this.state.lat} lon={this.state.lon} styles={{height:'200px'}}/>}
               </Col>
             </FormGroup>
           </Form>
@@ -158,4 +181,4 @@ class AddDoctor extends Component {
   }
 }
 
-export  default AddDoctor;
+export default AddDoctor;
