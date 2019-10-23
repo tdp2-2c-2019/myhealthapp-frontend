@@ -104,7 +104,7 @@ class AddHospital extends Component {
                 <Label htmlFor="email-input">Teléfono</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="number" id="telephone-input" name="telephone" placeholder="47395539" required/>
+                <Input type="number" min="0" id="telephone-input" name="telephone" placeholder="47395539" required/>
                 <FormText className="help-block">Ingrese el teléfono de contacto</FormText>
               </Col>
             </FormGroup>
