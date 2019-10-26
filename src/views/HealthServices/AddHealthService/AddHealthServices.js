@@ -77,6 +77,7 @@ class AddHealthServices extends Component {
             specializations={this.state.specializations}
             languages={this.state.languages}
             onSubmit={(healthService, url) => this.handleSubmit(healthService, url)}
+            edit={true}
           />
         </TabPane>
         <TabPane tabId={2}>
@@ -85,6 +86,7 @@ class AddHealthServices extends Component {
             specializations={this.state.specializations}
             languages={this.state.languages}
             onSubmit={(healthService, url) => this.handleSubmit(healthService, url)}
+            edit={true}
           />
         </TabPane>
       </>

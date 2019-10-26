@@ -14,6 +14,7 @@ import {
 import CardFooter from "reactstrap/es/CardFooter";
 import Search from '../../Search/Search';
 import MapWrapper from '../../MapWrapper/MapWrapper';
+import { AppSwitch } from '@coreui/react'
 
 const axios = require('axios');
 
@@ -24,13 +25,30 @@ class AddHospital extends Component {
       lat: -34.6175,
       lon: -58.3683,
       zone: null,
+      plans: this.props.plans,
+      languages: this.props.languages,
+      specializations: this.props.specializations,
+      editEnabled: this.props.edit || false, 
+      hospital: null
     }; 
   }
 
-  componentDidMount() {
-    this.getAPIKey().then(key => {
-      this.setState({ APIKey: key });
-    })
+  async componentDidMount() {
+    try {
+      const plansReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/plans');
+      const langReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/languages');
+      const specReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/specializations');
+      const APIKey = await this.getAPIKey();
+      let hospital = null;
+      if (!this.state.editEnabled) {
+        hospital = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals/${this.props.match.params.id}`);
+      }
+      console.log(hospital.data);
+      
+      this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, hospital: hospital.data });
+    } catch (error) {
+      this.setState({ isFailAlertVisible: true, failAlertMessage: 'Error al contactarse con el servidor. Intente nuevamente.' })
+    }
   }
 
   getAPIKey = async () => {
@@ -77,7 +95,11 @@ class AddHospital extends Component {
     return (
       <Card>
         <CardHeader>
-          <strong>Ingrese los datos del centro de salud</strong>
+          <strong>{!this.state.hospital ? 'Ingrese los datos del centro de salud' : 'Centro de salud'}</strong>
+          <div style={{ float: 'right' }}>
+            <p>Habilitar edición</p>
+          <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} checked={this.state.editEnabled} onChange={() => this.setState((prevState) => ({...prevState, editEnabled: !prevState.editEnabled}))}/>
+          </div>
         </CardHeader>
         <CardBody>
           <Form id="hospital-form" className="form-horizontal" onSubmit={this.handleSubmit}>
@@ -86,8 +108,8 @@ class AddHospital extends Component {
                 <Label htmlFor="text-input">Nombre</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="text" id="name-input" name="name" placeholder="Hospital Central" required/>
-                <FormText color="muted">Ingrese el nombre completo</FormText>
+                <Input type="text" id="name-input" name="name" placeholder="Hospital Central" required disabled={!this.state.editEnabled} value={this.state.hospital && this.state.hospital.name}/>
+                {!this.state.hospital && <FormText color="muted">Ingrese el nombre completo</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -95,8 +117,8 @@ class AddHospital extends Component {
                 <Label htmlFor="mail-input">Mail</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="email" id="mail-input" name="mail" placeholder="contacto@hcentral.com.ar" autoComplete="email" required/>
-                <FormText className="help-block">Ingrese el mail de contacto</FormText>
+                <Input type="email" id="mail-input" name="mail" placeholder="contacto@hcentral.com.ar" autoComplete="email" required disabled={!this.state.editEnabled} value={this.state.hospital && this.state.hospital.mail}/>
+                {!this.state.hospital && <FormText className="help-block">Ingrese el mail de contacto</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -104,8 +126,8 @@ class AddHospital extends Component {
                 <Label htmlFor="email-input">Teléfono</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="number" min="0" id="telephone-input" name="telephone" placeholder="47395539" required/>
-                <FormText className="help-block">Ingrese el teléfono de contacto</FormText>
+                <Input type="number" min="0" id="telephone-input" name="telephone" placeholder="47395539" required disabled={!this.state.editEnabled} value={this.state.hospital && this.state.hospital.telephone}/>
+                {!this.state.hospital && <FormText className="help-block">Ingrese el teléfono de contacto</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -113,8 +135,8 @@ class AddHospital extends Component {
                 <Label htmlFor="text-input">Dirección</Label>
               </Col>
               <Col xs="12" md="9">
-                <Search onSelect={this.setLatLonAndZone} id={'hospital-autocomplete'}/>
-                <FormText color="muted">Ingrese la dirección del centro de salud</FormText>
+                <Search onSelect={this.setLatLonAndZone} id={'hospital-autocomplete'} disabled={!this.state.editEnabled} value={this.state.hospital && this.state.hospital.address}/>
+                {!this.state.hospital && <FormText color="muted">Ingrese la dirección del centro de salud</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -122,18 +144,18 @@ class AddHospital extends Component {
                 <Label htmlFor="select">Plan mínimo</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0" required>
+                <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0" required disabled={!this.state.editEnabled} value={this.state.hospital && this.state.hospital.minimum_plan}>
                   <option value="0" disabled>Por favor elija el plan mínimo</option>
-                  {this.props.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{ plan.plan_name }</option>)}
+                  {this.state.plans && this.state.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{ plan.plan_name }</option>)}
                 </Input>
               </Col>
             </FormGroup>
             <FormGroup row>
               <Col md="3"><Label>Especializaciones</Label></Col>
               <Col md="9">
-                <Input type="select" name="specialization" id="specialization-select" multiple required>
+                <Input type="select" name="specialization" id="specialization-select" multiple required disabled={!this.state.editEnabled} value={this.state.hospital && this.state.hospital.specializations}>
                   {
-                    this.props.specializations.map(specialization => <option key={`specialization-${specialization.id}`}>{ specialization.name }</option>)
+                    this.state.specializations && this.state.specializations.map(specialization => <option key={`specialization-${specialization.id}`}>{ specialization.name }</option>)
                   }
                 </Input>
               </Col>
@@ -143,9 +165,9 @@ class AddHospital extends Component {
                 <Label>Idiomas</Label>
               </Col>
               <Col md="9">
-                <Input type="select" name="language" id="language-select" multiple required>
+                <Input type="select" name="language" id="language-select" multiple required disabled={!this.state.editEnabled} value={this.state.hospital && this.state.hospital.languages}>
                   {
-                    this.props.languages.map(language => <option key={`language-${language.id}`}>{ language.name }</option>)
+                    this.state.languages && this.state.languages.map(language => <option key={`language-${language.id}`}>{ language.name }</option>)
                   }
                 </Input>
               </Col>
@@ -155,16 +177,16 @@ class AddHospital extends Component {
                 <Label>Mapa</Label>
               </Col>
               <Col md="9" style={{ height: '300px' }}>
-                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={this.state.lat} lon={this.state.lon} styles={{ height: '200px' }} />}
+                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={(this.state.hospital && this.state.hospital.lat) ? this.state.hospital.lat : this.state.lat} lon={(this.state.hospital && this.state.hospital.lon) ? this.state.hospital.lon : this.state.lon} styles={{ height: '200px' }} />}
               </Col>
             </FormGroup>
           </Form>
         </CardBody>
-        <CardFooter>
+        {this.state.editEnabled && <CardFooter>
           <Button type="submit" color="primary" form="hospital-form"><i className="fa fa-dot-circle-o" /> Crear</Button>
           {' '}
           <Button type="reset" color="danger" form="hospital-form"><i className="fa fa-ban" /> Cancelar</Button>
-        </CardFooter>
+        </CardFooter>}
       </Card>
     );
   }

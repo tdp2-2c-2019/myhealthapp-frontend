@@ -40,7 +40,7 @@ class MapWrapper extends Component {
         google={this.props.google}
         zoom={14}
         style={mapStyles}
-        initialCenter={ { lat: -34.6175, lng: -58.3683 } }
+        initialCenter={ (this.props.lat && this.props.lon) ? {lat: this.props.lat, lng: this.props.lon} :{ lat: -34.6175, lng: -58.3683 } }
         center={ { lat: this.props.lat, lng: this.props.lon } }
       >
         <Marker
