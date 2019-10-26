@@ -85,6 +85,30 @@ class AddHospital extends Component {
     }}));
   };
 
+  submit = async (healthService, url) => {
+    try {
+      await axios.post(url, healthService);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.setState({ isSuccessAlertVisible: true });
+    } catch (error) {
+      let message = 'Error al crear nuevo prestador: ';
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        message = message.concat(`Mensaje del servidor: ${error.response.statusText}`);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        message = message.concat('No pudo establecerse comunicación con el servidor.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        message = message.concat('No pudo realizarse el pedido al servidor');
+      }
+      this.setState({ isFailAlertVisible: true, failAlertMessage: message });
+    }
+  };
+
   handleSubmit = (event) => {
     event.preventDefault();
     const target = event.target;
@@ -101,7 +125,8 @@ class AddHospital extends Component {
       zone: this.state.zone,
     };
     event.target.reset();
-    this.props.onSubmit(hospital, 'https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals');
+    // TODO: Implement update endpoint
+    if (this.props.onSubmit) this.props.onSubmit(hospital, 'https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals');
   };
 
   handleChange = (event) => {    
@@ -206,7 +231,7 @@ class AddHospital extends Component {
           </Form>
         </CardBody>
         {this.state.editEnabled && <CardFooter>
-          <Button type="submit" color="primary" form="hospital-form"><i className="fa fa-dot-circle-o" /> Crear</Button>
+          <Button type="submit" color="primary" form="hospital-form"><i className="fa fa-dot-circle-o" /> Guardar </Button>
           {' '}
           <Button type="reset" color="danger" form="hospital-form"><i className="fa fa-ban" /> Cancelar</Button>
         </CardFooter>}
