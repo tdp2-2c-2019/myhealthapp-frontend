@@ -76,11 +76,13 @@ class AddHospital extends Component {
 
   setLatLonAndZone = (address) => {
     const zoneAddressComponent = address.address_components.filter(component => component.types.some((text) => text === 'sublocality' || text === 'locality'))[0]
-    this.setState({
+    this.setState((prevState) => ({
+      hospital: {
+      ...prevState.hospital,
       lat: address.geometry.location.lat(),
       lon: address.geometry.location.lng(),
       zone: zoneAddressComponent ? zoneAddressComponent.long_name : ''
-    });
+    }}));
   };
 
   handleSubmit = (event) => {

@@ -55,6 +55,7 @@ class Search extends Component {
         const addressObject = this.autocomplete.getPlace();
         const address = addressObject.address_components;
         this.props.onSelect(addressObject)
+        this.props.onChange({ target: { name: 'address', value: addressObject.formatted_address }})
         // Check if address is valid
         if (address) {
             // Set State
