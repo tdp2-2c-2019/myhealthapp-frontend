@@ -37,8 +37,8 @@ class AddDoctor extends Component {
         telephone: 0,
         address: "",
         address_notes: "",
-        lat: 0,
-        lon: 0,
+        lat: null,
+        lon: null,
         zone: "",
         specializations: [],
         languages: []
@@ -52,7 +52,7 @@ class AddDoctor extends Component {
       const langReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/languages');
       const specReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/specializations');
       const APIKey = await this.getAPIKey();      
-      if (!this.state.editEnabled) {
+      if (!this.props.isNew) {
         const doctor = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/doctors/${this.props.match.params.id}`);
         this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, doctor: doctor.data });
       } else {
@@ -213,7 +213,7 @@ class AddDoctor extends Component {
                 <Label>Mapa</Label>
               </Col>
               <Col md="9" style={{height: '300px'}}>
-                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={this.state.doctor.lat} lon={this.state.doctor.lon} styles={{height:'200px'}}/>}
+                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={(this.state.doctor && this.state.doctor.lat) ? this.state.doctor.lat : this.state.lat} lon={(this.state.doctor && this.state.doctor.lon) ? this.state.doctor.lon : this.state.lon} styles={{ height: '200px' }}/>}
               </Col>
             </FormGroup>
           </Form>

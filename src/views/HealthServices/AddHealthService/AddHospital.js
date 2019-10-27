@@ -36,8 +36,8 @@ class AddHospital extends Component {
         mail: "",
         telephone: 0,
         address: "",
-        lat: 0,
-        lon: 0,
+        lat: null,
+        lon: null,
         zone: "",
         specializations: [],
         languages: []
@@ -51,7 +51,7 @@ class AddHospital extends Component {
       const langReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/languages');
       const specReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/specializations');
       const APIKey = await this.getAPIKey();
-      if (!this.state.editEnabled) {
+      if (!this.props.isNew) {
         const hospital = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals/${this.props.match.params.id}`);
         this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, hospital: hospital.data });
       } else {
