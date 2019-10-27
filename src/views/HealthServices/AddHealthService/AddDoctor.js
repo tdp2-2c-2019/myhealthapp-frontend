@@ -34,7 +34,7 @@ class AddDoctor extends Component {
         minimum_plan: 0,
         name: "",
         mail: "",
-        telephone: null,
+        telephone: 0,
         address: "",
         address_notes: "",
         lat: 0,
@@ -52,11 +52,12 @@ class AddDoctor extends Component {
       const langReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/languages');
       const specReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/specializations');
       const APIKey = await this.getAPIKey();      
-      let doctor = null;
       if (!this.state.editEnabled) {
-        doctor = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/doctors/${this.props.match.params.id}`);
+        const doctor = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/doctors/${this.props.match.params.id}`);
+        this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, doctor: doctor.data });
+      } else {
+        this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey });
       }
-      this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, doctor: doctor.data });
     } catch (error) {
       this.setState({ isFailAlertVisible: true, failAlertMessage: 'Error al contactarse con el servidor. Intente nuevamente.' })
     }
@@ -179,7 +180,7 @@ class AddDoctor extends Component {
                 <Label htmlFor="select">Plan mínimo</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0" required disabled={!this.state.editEnabled} value={this.state.doctor.minimum_plan} onChange={this.handleChange}>
+                <Input type="select" name="minimum_plan" id="minimum-plan-select" required disabled={!this.state.editEnabled} value={this.state.doctor.minimum_plan} onChange={this.handleChange}>
                   <option value="0" disabled>Elija el plan mínimo requerido</option>
                   {this.state.plans && this.state.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{plan.plan_name}</option>)}
                 </Input>

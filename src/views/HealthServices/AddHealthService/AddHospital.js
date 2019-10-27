@@ -51,11 +51,12 @@ class AddHospital extends Component {
       const langReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/languages');
       const specReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/specializations');
       const APIKey = await this.getAPIKey();
-      let hospital = null;
       if (!this.state.editEnabled) {
-        hospital = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals/${this.props.match.params.id}`);
-      }      
-      this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, hospital: hospital.data });
+        const hospital = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals/${this.props.match.params.id}`);
+        this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, hospital: hospital.data });
+      } else {
+        this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey });
+      }
     } catch (error) {
       this.setState({ isFailAlertVisible: true, failAlertMessage: 'Error al contactarse con el servidor. Intente nuevamente.' })
     }
@@ -168,7 +169,7 @@ class AddHospital extends Component {
                 <Label htmlFor="select">Plan mínimo</Label>
               </Col>
               <Col xs="12" md="9">
-                <Input type="select" name="minimum_plan" id="minimum-plan-select" defaultValue="0" required disabled={!this.state.editEnabled} value={this.state.hospital.minimum_plan} onChange={this.handleChange}>
+                <Input type="select" name="minimum_plan" id="minimum-plan-select" required disabled={!this.state.editEnabled} value={this.state.hospital.minimum_plan} onChange={this.handleChange}>
                   <option value="0" disabled>Por favor elija el plan mínimo</option>
                   {this.state.plans && this.state.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{ plan.plan_name }</option>)}
                 </Input>
