@@ -143,24 +143,6 @@ class AddDoctor extends Component {
             </FormGroup>
             <FormGroup row>
               <Col md="3">
-                <Label htmlFor="text-input">Dirección</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Search onSelect={this.setLatLonAndZone} id={'doctor-autocomplete'} disabled={!this.state.editEnabled} value={this.state.doctor.address} onChange={this.handleChange}/>
-                {this.props.isNew && <FormText color="muted">Ingrese la dirección</FormText>}
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
-                <Label htmlFor="text-input">Piso / Departamento</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Input type="text" id="address-notes-input" name="address_notes" placeholder="3 B" required disabled={!this.state.editEnabled} value={this.state.doctor.address_notes} onChange={this.handleChange}/>
-                {this.props.isNew && <FormText color="muted">Ingrese el piso y/o departamento</FormText>}
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
                 <Label htmlFor="select">Plan mínimo</Label>
               </Col>
               <Col xs="12" md="9">
@@ -190,6 +172,24 @@ class AddDoctor extends Component {
                     this.state.languages && this.state.languages.map(language => <option key={`language-${language.id}`}>{language.name}</option>)
                   }
                 </Input>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label htmlFor="text-input">Dirección</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Search onSelect={this.setLatLonAndZone} id={'doctor-autocomplete'} disabled={!this.state.editEnabled} value={this.state.doctor.address} onChange={this.handleChange}/>
+                {this.props.isNew && <FormText color="muted">Ingrese la dirección</FormText>}
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label htmlFor="text-input">Piso / Departamento</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Input type="text" id="address-notes-input" name="address_notes" placeholder="3 B" required disabled={!this.state.editEnabled} value={this.state.doctor.address_notes} onChange={this.handleChange}/>
+                {this.props.isNew && <FormText color="muted">Ingrese el piso y/o departamento</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>

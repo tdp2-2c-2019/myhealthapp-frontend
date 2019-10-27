@@ -142,15 +142,6 @@ class AddHospital extends Component {
             </FormGroup>
             <FormGroup row>
               <Col md="3">
-                <Label htmlFor="text-input">Dirección</Label>
-              </Col>
-              <Col xs="12" md="9">
-                <Search onSelect={this.setLatLonAndZone} id={'hospital-autocomplete'} disabled={!this.state.editEnabled} value={this.state.hospital.address} onChange={this.handleChange}/>
-                {this.props.isNew && <FormText color="muted">Ingrese la dirección del centro de salud</FormText>}
-              </Col>
-            </FormGroup>
-            <FormGroup row>
-              <Col md="3">
                 <Label htmlFor="select">Plan mínimo</Label>
               </Col>
               <Col xs="12" md="9">
@@ -180,6 +171,15 @@ class AddHospital extends Component {
                     this.state.languages && this.state.languages.map(language => <option key={`language-${language.id}`}>{ language.name }</option>)
                   }
                 </Input>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md="3">
+                <Label htmlFor="text-input">Dirección</Label>
+              </Col>
+              <Col xs="12" md="9">
+                <Search onSelect={this.setLatLonAndZone} id={'hospital-autocomplete'} disabled={!this.state.editEnabled} value={this.state.hospital.address} onChange={this.handleChange}/>
+                {this.props.isNew && <FormText color="muted">Ingrese la dirección del centro de salud</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>
