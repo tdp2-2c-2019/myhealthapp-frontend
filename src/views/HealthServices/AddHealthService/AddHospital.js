@@ -119,7 +119,7 @@ class AddHospital extends Component {
     return (
       <Card>
         <CardHeader>
-          <strong>{!this.state.hospital ? 'Ingrese los datos del centro de salud' : 'Centro de salud'}</strong>
+          <strong>{'Centro de salud'}</strong>
           <div style={{ float: 'right' }}>
             <p>Habilitar edición</p>
           <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} checked={this.state.editEnabled} onChange={() => this.setState((prevState) => ({...prevState, editEnabled: !prevState.editEnabled}))}/>
@@ -133,7 +133,7 @@ class AddHospital extends Component {
               </Col>
               <Col xs="12" md="9">
                 <Input type="text" id="name-input" name="name" value={this.state.hospital.name} onChange={this.handleChange} placeholder={"Hospital Central"} required disabled={!this.state.editEnabled}/>
-                {!this.state.hospital && <FormText color="muted">Ingrese el nombre completo</FormText>}
+                {this.props.isNew && <FormText color="muted">Ingrese el nombre completo</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -142,7 +142,7 @@ class AddHospital extends Component {
               </Col>
               <Col xs="12" md="9">
                 <Input type="email" id="mail-input" name="mail" placeholder="contacto@hcentral.com.ar" autoComplete="email" required disabled={!this.state.editEnabled} value={this.state.hospital.mail} onChange={this.handleChange}/>
-                {!this.state.hospital && <FormText className="help-block">Ingrese el mail de contacto</FormText>}
+                {this.props.isNew && <FormText className="help-block">Ingrese el mail de contacto</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -151,7 +151,7 @@ class AddHospital extends Component {
               </Col>
               <Col xs="12" md="9">
                 <Input type="number" min="0" id="telephone-input" name="telephone" placeholder="47395539" required disabled={!this.state.editEnabled} value={this.state.hospital.telephone} onChange={this.handleChange}/>
-                {!this.state.hospital && <FormText className="help-block">Ingrese el teléfono de contacto</FormText>}
+                {this.props.isNew && <FormText className="help-block">Ingrese el teléfono de contacto</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -160,7 +160,7 @@ class AddHospital extends Component {
               </Col>
               <Col xs="12" md="9">
                 <Search onSelect={this.setLatLonAndZone} id={'hospital-autocomplete'} disabled={!this.state.editEnabled} value={this.state.hospital.address} onChange={this.handleChange}/>
-                {!this.state.hospital && <FormText color="muted">Ingrese la dirección del centro de salud</FormText>}
+                {this.props.isNew && <FormText color="muted">Ingrese la dirección del centro de salud</FormText>}
               </Col>
             </FormGroup>
             <FormGroup row>

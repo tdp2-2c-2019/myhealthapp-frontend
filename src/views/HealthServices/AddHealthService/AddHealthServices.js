@@ -21,7 +21,8 @@ class AddHealthServices extends Component {
       failAlertMessage: '',
       plans: [],
       languages: [],
-      specializations: []
+      specializations: [],
+      APIKey: null
     };
   }
 
@@ -30,11 +31,17 @@ class AddHealthServices extends Component {
       const plansReq = await  axios.get('https://myhealthapp-backend.herokuapp.com/api/plans');
       const langReq = await  axios.get('https://myhealthapp-backend.herokuapp.com/api/languages');
       const specReq = await  axios.get('https://myhealthapp-backend.herokuapp.com/api/specializations');
-      this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data });
+      const APIKey = this.getAPIKey();
+      this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey });
     } catch (error) {
       this.setState({ isFailAlertVisible: true, failAlertMessage: 'Error al contactarse con el servidor. Intente nuevamente.'})
     }
   }
+
+  getAPIKey = async () => {
+    const response = await axios.get('https://myhealthapp-backend.herokuapp.com/api/search-key');
+    return response.data.key;
+  };
 
   handleSubmit = async (healthService, url) => {
     try {
@@ -77,7 +84,9 @@ class AddHealthServices extends Component {
             specializations={this.state.specializations}
             languages={this.state.languages}
             onSubmit={(healthService, url) => this.handleSubmit(healthService, url)}
+            isNew={true}
             edit={true}
+            APIKey={this.state.APIKey}
           />
         </TabPane>
         <TabPane tabId={2}>
@@ -86,7 +95,9 @@ class AddHealthServices extends Component {
             specializations={this.state.specializations}
             languages={this.state.languages}
             onSubmit={(healthService, url) => this.handleSubmit(healthService, url)}
+            isNew={true}
             edit={true}
+            APIKey={this.state.APIKey}
           />
         </TabPane>
       </>
