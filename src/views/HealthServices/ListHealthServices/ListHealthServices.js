@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, CardBody, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
+import { Button, Card, CardBody, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
+import { Link } from 'react-router-dom';
 const axios = require('axios');
 
 class ListHealthServices extends Component {
@@ -47,18 +48,23 @@ class ListHealthServices extends Component {
                                     <th>Nombre</th>
                                     <th>Mail</th>
                                     <th>Dirección</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {services.length > 0 && 
-                                    services.slice(currentPage * pageSize, (currentPage + 1) * pageSize).map(service => {
+                                    services.slice(currentPage * pageSize, (currentPage + 1) * pageSize).map(service => {                                        
                                     return (
-                                        <tr key={service.name} >
-                                            <td>{service.minimum_plan}</td>
-                                            <td>{service.name}</td>
-                                            <td>{service.mail}</td>
-                                            <td>{service.address}</td>
-                                        </tr>)
+                                            <tr key={service.name}>
+                                                <td>{service.minimum_plan}</td>
+                                                <td>{service.name}</td>
+                                                <td>{service.mail}</td>
+                                                <td>{service.address}</td>
+                                            <td>{<Link to={service.health_center ? `/hospitals/${service.id}` : `/doctors/${service.id}`}>
+                                                <Button color="link" tabIndex={-1}>Ver detalle</Button>
+                                            </Link>}</td>
+                                            </tr>
+)
                                 })}
                             </tbody>
                         </Table>

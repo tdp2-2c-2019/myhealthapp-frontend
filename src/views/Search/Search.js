@@ -55,6 +55,7 @@ class Search extends Component {
         const addressObject = this.autocomplete.getPlace();
         const address = addressObject.address_components;
         this.props.onSelect(addressObject)
+        this.props.onChange({ target: { name: 'address', value: addressObject.formatted_address }})
         // Check if address is valid
         if (address) {
             // Set State
@@ -79,7 +80,7 @@ class Search extends Component {
                     url={`https://maps.googleapis.com/maps/api/js?key=${this.state.APIKey}&libraries=places`}
                     onLoad={this.handleScriptLoad}
                 />
-                <Input type="text" id={this.props.id} name="address" placeholder="Matienzos 345" required />
+                <Input type="text" id={this.props.id} name="address" placeholder="Matienzos 345" required disabled={this.props.disabled} value={this.props.value} onChange={this.props.onChange}/>
             </div>
         );
     }

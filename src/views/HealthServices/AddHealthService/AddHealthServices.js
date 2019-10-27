@@ -36,6 +36,11 @@ class AddHealthServices extends Component {
     }
   }
 
+  getAPIKey = async () => {
+    const response = await axios.get('https://myhealthapp-backend.herokuapp.com/api/search-key');
+    return response.data.key;
+  };
+
   handleSubmit = async (healthService, url) => {
     try {
       await axios.post(url, healthService);
@@ -77,6 +82,8 @@ class AddHealthServices extends Component {
             specializations={this.state.specializations}
             languages={this.state.languages}
             onSubmit={(healthService, url) => this.handleSubmit(healthService, url)}
+            isNew={true}
+            edit={true}
           />
         </TabPane>
         <TabPane tabId={2}>
@@ -85,6 +92,8 @@ class AddHealthServices extends Component {
             specializations={this.state.specializations}
             languages={this.state.languages}
             onSubmit={(healthService, url) => this.handleSubmit(healthService, url)}
+            isNew={true}
+            edit={true}
           />
         </TabPane>
       </>
