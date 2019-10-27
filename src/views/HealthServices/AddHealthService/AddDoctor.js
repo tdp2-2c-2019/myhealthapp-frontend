@@ -22,9 +22,6 @@ class AddDoctor extends Component {
   constructor(props) {
     super(props);    
     this.state = {
-      lat: -34.6175,
-      lon: -58.3683,
-      zone: null,
       APIKey: this.props.APIKey || '',
       editEnabled: this.props.edit || false,
       plans: this.props.plans,
@@ -37,8 +34,8 @@ class AddDoctor extends Component {
         telephone: 0,
         address: "",
         address_notes: "",
-        lat: null,
-        lon: null,
+        lat: -34.6175,
+        lon: -58.3683,
         zone: "",
         specializations: [],
         languages: []
@@ -91,21 +88,8 @@ class AddDoctor extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const target = event.target;
-    const doctor = {
-      name: target[0].value,
-      mail: target[1].value,
-      telephone: target[2].value,
-      address: target[3].value,
-      address_notes: target[4].value,
-      minimum_plan: target[5].value,
-      specializations: this.getSelectedValues(target[6].children),
-      languages: this.getSelectedValues(target[7].children),
-      lat: this.state.lat,
-      lon: this.state.lon,
-      zone: this.state.zone,
-    };
     event.target.reset();
-    if (this.props.onSubmit) this.props.onSubmit(doctor, 'https://myhealthapp-backend.herokuapp.com/api/health-services/doctors');
+    if (this.props.onSubmit) this.props.onSubmit(this.state.doctor, 'https://myhealthapp-backend.herokuapp.com/api/health-services/doctors');
   };
 
   handleChange = (event) => {
@@ -213,7 +197,7 @@ class AddDoctor extends Component {
                 <Label>Mapa</Label>
               </Col>
               <Col md="9" style={{height: '300px'}}>
-                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={(this.state.doctor && this.state.doctor.lat) ? this.state.doctor.lat : this.state.lat} lon={(this.state.doctor && this.state.doctor.lon) ? this.state.doctor.lon : this.state.lon} styles={{ height: '200px' }}/>}
+                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={this.state.doctor.lat} lon={this.state.doctor.lon} styles={{ height: '200px' }}/>}
               </Col>
             </FormGroup>
           </Form>

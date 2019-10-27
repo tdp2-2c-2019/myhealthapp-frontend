@@ -24,7 +24,6 @@ class AddHospital extends Component {
     this.state = {
       lat: -34.6175,
       lon: -58.3683,
-      zone: null,
       plans: this.props.plans,
       languages: this.props.languages,
       specializations: this.props.specializations,
@@ -35,8 +34,8 @@ class AddHospital extends Component {
         mail: "",
         telephone: 0,
         address: "",
-        lat: null,
-        lon: null,
+        lat: -34.6175,
+        lon: -58.3683,
         zone: "",
         specializations: [],
         languages: []
@@ -87,22 +86,9 @@ class AddHospital extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const target = event.target;
-    const hospital = {
-      name: target[0].value,
-      mail: target[1].value,
-      telephone: target[2].value,
-      address: target[3].value,
-      minimum_plan: target[4].value,
-      specializations: this.getSelectedValues(target[5].children),
-      languages: this.getSelectedValues(target[6].children),
-      lat: this.state.lat,
-      lon: this.state.lon,
-      zone: this.state.zone,
-    };
     event.target.reset();
     // TODO: Implement update endpoint
-    if (this.props.onSubmit) this.props.onSubmit(hospital, 'https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals');
+    if (this.props.onSubmit) this.props.onSubmit(this.state.hospital, 'https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals');
   };
 
   handleChange = (event) => {    
@@ -201,7 +187,7 @@ class AddHospital extends Component {
                 <Label>Mapa</Label>
               </Col>
               <Col md="9" style={{ height: '300px' }}>
-                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={(this.state.hospital && this.state.hospital.lat) ? this.state.hospital.lat : this.state.lat} lon={(this.state.hospital && this.state.hospital.lon) ? this.state.hospital.lon : this.state.lon} styles={{ height: '200px' }} />}
+                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={this.state.hospital.lat} lon={this.state.hospital.lon} styles={{ height: '200px' }} />}
               </Col>
             </FormGroup>
           </Form>
