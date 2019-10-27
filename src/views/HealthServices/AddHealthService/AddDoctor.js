@@ -78,8 +78,8 @@ class AddDoctor extends Component {
   setLatLonAndZone = (address) => {
     const zoneAddressComponent = address.address_components.filter(component => component.types.some((text) => text === 'sublocality' || text === 'locality'))[0]
     this.setState((prevState) => ({
-      hospital: {
-        ...prevState.hospital,
+      doctor: {
+        ...prevState.doctor,
         lat: address.geometry.location.lat(),
         lon: address.geometry.location.lng(),
         zone: zoneAddressComponent ? zoneAddressComponent.long_name : ''
@@ -212,7 +212,7 @@ class AddDoctor extends Component {
                 <Label>Mapa</Label>
               </Col>
               <Col md="9" style={{height: '300px'}}>
-                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={this.state.lat} lon={this.state.lon} styles={{height:'200px'}}/>}
+                {this.state.APIKey && <MapWrapper APIKey={this.state.APIKey} lat={this.state.doctor.lat} lon={this.state.doctor.lon} styles={{height:'200px'}}/>}
               </Col>
             </FormGroup>
           </Form>
