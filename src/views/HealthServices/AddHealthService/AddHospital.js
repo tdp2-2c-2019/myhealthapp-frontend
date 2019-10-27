@@ -30,7 +30,6 @@ class AddHospital extends Component {
       specializations: this.props.specializations,
       editEnabled: this.props.edit || false, 
       hospital: {
-        id: 0,
         minimum_plan: 0,
         name: "",
         mail: "",
@@ -121,10 +120,10 @@ class AddHospital extends Component {
       <Card>
         <CardHeader>
           <strong>{this.props.isNew ? 'Ingrese la información del centro de salud' : 'Centro de salud'}</strong>
-          <div style={{ float: 'right' }}>
+          {!this.props.isNew && <div style={{ float: 'right' }}>
             <p>Habilitar edición</p>
           <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} checked={this.state.editEnabled} onChange={() => this.setState((prevState) => ({...prevState, editEnabled: !prevState.editEnabled}))}/>
-          </div>
+          </div>}
         </CardHeader>
         <CardBody>
           <Form id="hospital-form" className="form-horizontal" onSubmit={this.handleSubmit}>
