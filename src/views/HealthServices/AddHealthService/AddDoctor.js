@@ -121,7 +121,7 @@ class AddDoctor extends Component {
     return (
       <Card>
         <CardHeader>
-          <strong>{'Doctor'}</strong>
+          <strong>{this.props.isNew ? 'Ingrese la información del doctor' : 'Doctor'}</strong>
           {!this.props.isNew && <div style={{ float: 'right' }}>
             <p>Habilitar edición</p>
             <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} checked={this.state.editEnabled} onChange={() => this.setState((prevState) => ({ ...prevState, editEnabled: !prevState.editEnabled }))} />

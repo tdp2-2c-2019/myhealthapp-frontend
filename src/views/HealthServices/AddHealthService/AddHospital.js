@@ -119,7 +119,7 @@ class AddHospital extends Component {
     return (
       <Card>
         <CardHeader>
-          <strong>{'Centro de salud'}</strong>
+          <strong>{this.props.isNew ? 'Ingrese la información del centro de salud' : 'Centro de salud'}</strong>
           <div style={{ float: 'right' }}>
             <p>Habilitar edición</p>
           <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} checked={this.state.editEnabled} onChange={() => this.setState((prevState) => ({...prevState, editEnabled: !prevState.editEnabled}))}/>
