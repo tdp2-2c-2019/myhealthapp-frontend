@@ -44,14 +44,19 @@ export default {
         {
           name: 'Lista de prestadores',
           url: '/health-services/list',
-          icon: 'icon-list'
+          icon: 'icon-list',
         },
         {
           name: 'Agregar prestador',
           url: '/health-services/new',
-          icon: 'icon-user-follow'
-        }
-      ]
+          icon: 'icon-user-follow',
+        },
+      ],
+    },
+    {
+      name: 'Autorizaciones',
+      url: '/authorizations/list',
+      icon: 'icon-drawer',
     },
     // {
     //   name: 'Base',

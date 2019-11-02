@@ -106,9 +106,6 @@ class AddHealthServices extends Component {
         <Alert color="success" isOpen={this.state.isSuccessAlertVisible} name="isSuccessAlertVisible" toggle={() => this.handleAlertDismiss("isSuccessAlertVisible")}>
           Prestador creado con éxito.
         </Alert>
-        <Alert color="danger" isOpen={this.state.isFailAlertVisible} name="isFailAlertVisible" toggle={() => this.handleAlertDismiss("isFailAlertVisible")}>
-          {this.state.failAlertMessage}
-        </Alert>
         <Nav tabs>
           <NavItem>
             <NavLink
