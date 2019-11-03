@@ -56,12 +56,12 @@ class AddDoctor extends Component {
         const doctorReq = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/doctors/${this.props.match.params.id}`);
         doctorReq.status === 200 ?
           this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, doctor: doctorReq.data }) :
-          this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexion con el servidor, intente mas tarde.' });
+          this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' });
       } else {
         this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey });
       }
     } catch (error) {
-      this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexion con el servidor, intente mas tarde.' })
+      this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' })
     }
   }
 
