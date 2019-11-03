@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBody, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
+import { Alert, Button, Card, CardBody, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
 import { Link } from 'react-router-dom';
 const axios = require('axios');
 
@@ -10,7 +10,9 @@ class ListHealthServices extends Component {
             services: [],
             currentPage: 0,
             pageSize: 9,
-            pagesCount: 0
+            pagesCount: 0,
+            isFailAlertVisible: false,
+            failAlertMessage: '',
         }
     }
 
@@ -23,11 +25,20 @@ class ListHealthServices extends Component {
     getServices = (offset) => {
         try {
             return axios.get('https://myhealthapp-backend.herokuapp.com/api/health-services').then(response => {
-                return response.status === 200 ? response.data : [];
+                if (response.status === 200) {
+                    return response.data;
+                } else {
+                    this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexion con el servidor, intente mas tarde.' })
+                    return [];
+                }
             })
         } catch (error) {
-            console.error(error)
+            this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexion con el servidor, intente mas tarde.' })
         }
+    };
+
+    handleAlertDismiss = (alertName) => {
+        this.setState({ [alertName]: false });
     };
 
     handleClick = (e, index) => {
@@ -38,7 +49,11 @@ class ListHealthServices extends Component {
     render() {
         const { currentPage, pagesCount, pageSize, services } = this.state;
         return (
+            
             <div className="animated fadeIn">
+                <Alert color="danger" isOpen={this.state.isFailAlertVisible} name="isFailAlertVisible" toggle={() => this.handleAlertDismiss("isFailAlertVisible")}>
+                    {this.state.failAlertMessage}
+                </Alert>
                 <Card>
                     <CardBody>
                         <Table responsive hover>
