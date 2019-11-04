@@ -1,5 +1,7 @@
-import ListAuthorizations from './ListAuthorizations/ListAuthorizations';
+import ListAuthorizations from './ListAuthorizations';
+import ViewAuthorization from './ViewAuthorization';
 
 export {
+  ViewAuthorization,
   ListAuthorizations,
 };

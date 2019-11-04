@@ -1,0 +1,6 @@
+{
+    "name": "ViewAuthorization",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./ViewAuthorization.js"
+}
