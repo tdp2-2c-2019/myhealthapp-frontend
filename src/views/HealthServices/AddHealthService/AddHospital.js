@@ -29,17 +29,18 @@ class AddHospital extends Component {
       languages: this.props.languages,
       specializations: this.props.specializations,
       editEnabled: this.props.edit || false, 
-      isFailAlertVisible: false,
-      failAlertMessage: '',
+      isAlertVisible: false,
+      alertColor: '',
+      alertMessage: '',
       hospital: {
         minimum_plan: 0,
-        name: "",
-        mail: "",
+        name: '',
+        mail: '',
         telephone: 0,
-        address: "",
+        address: '',
         lat: -34.6175,
         lon: -58.3683,
-        zone: "",
+        zone: '',
         specializations: [],
         languages: []
       },
@@ -56,12 +57,12 @@ class AddHospital extends Component {
         const hospitalReq = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals/${this.props.match.params.id}`);
         hospitalReq.status === 200 ?
         this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, hospital: hospitalReq.data }) :
-          this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexion con el servidor, intente mas tarde.' });
+          this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' });
       } else {
         this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey });
       }
     } catch (error) {
-      this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexion con el servidor, intente mas tarde.' })
+      this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' })
     }
   }
 
@@ -93,9 +94,30 @@ class AddHospital extends Component {
     }}));
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
     event.target.reset();
+    try {
+      await axios.post('https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals', this.state.hospital);
+      window.scrollTo({ top: 0, behavior: 'smooth'});
+      this.setState({ alertColor: 'success', isAlertVisible: true, AlertMessage: 'Centro de salud creado con éxito' });
+    } catch (error) {
+      let message = 'Error al crear nuevo centro de salud: ';
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        message = message.concat(`Mensaje del servidor: ${error.response.statusText}`);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        message = message.concat('No pudo establecerse comunicación con el servidor.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        message = message.concat('No pudo realizarse el pedido al servidor');
+      }
+      this.setState({ alertColor: 'danger', isAlertVisible: true, AlertMessage: message });
+    }
     // TODO: Implement update endpoint
     if (this.props.onSubmit) this.props.onSubmit(this.state.hospital, 'https://myhealthapp-backend.herokuapp.com/api/health-services/hospitals');
   };
@@ -113,8 +135,8 @@ class AddHospital extends Component {
   render() {
     return (
       <div>
-        <Alert color="danger" isOpen={this.state.isFailAlertVisible} name="isFailAlertVisible" toggle={() => this.handleAlertDismiss("isFailAlertVisible")}>
-          {this.state.failAlertMessage}
+        <Alert color={this.state.alertColor} isOpen={this.state.isAlertVisible} name="isAlertVisible" toggle={() => this.handleAlertDismiss("isAlertVisible")}>
+          {this.state.alertMessage}
         </Alert>
         <Card>
           <CardHeader>

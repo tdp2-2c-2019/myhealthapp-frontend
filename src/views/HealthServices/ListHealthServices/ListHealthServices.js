@@ -23,18 +23,17 @@ class ListHealthServices extends Component {
     };
 
     getServices = (offset) => {
-        try {
-            return axios.get('https://myhealthapp-backend.herokuapp.com/api/health-services').then(response => {
-                if (response.status === 200) {
-                    return response.data;
-                } else {
-                    this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexion con el servidor, intente mas tarde.' })
-                    return [];
-                }
-            })
-        } catch (error) {
-            this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexion con el servidor, intente mas tarde.' })
-        }
+        return axios.get('https://myhealthapp-backend.herokuapp.com/api/health-services').then(response => {
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' })
+                return [];
+            }
+        }).catch(e => {
+            this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' })
+            return [];
+        })
     };
 
     handleAlertDismiss = (alertName) => {
