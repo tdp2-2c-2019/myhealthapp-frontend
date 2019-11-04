@@ -28,18 +28,19 @@ class AddDoctor extends Component {
       plans: this.props.plans,
       languages: this.props.languages,
       specializations: this.props.specializations,
-      isFailAlertVisible: false,
-      failAlertMessage: '',
+      alertColor: '',
+      isAlertVisible: false,
+      alertMessage: '',
       doctor: {
         minimum_plan: 0,
-        name: "",
-        mail: "",
+        name: '',
+        mail: '',
         telephone: 0,
-        address: "",
-        address_notes: "",
+        address: '',
+        address_notes: '',
         lat: -34.6175,
         lon: -58.3683,
-        zone: "",
+        zone: '',
         specializations: [],
         languages: []
       }
@@ -56,12 +57,12 @@ class AddDoctor extends Component {
         const doctorReq = await axios.get(`https://myhealthapp-backend.herokuapp.com/api/health-services/doctors/${this.props.match.params.id}`);
         doctorReq.status === 200 ?
           this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey, doctor: doctorReq.data }) :
-          this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' });
+          this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' });
       } else {
         this.setState({ plans: plansReq.data, languages: langReq.data, specializations: specReq.data, APIKey });
       }
     } catch (error) {
-      this.setState({ isFailAlertVisible: true, failAlertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' })
+      this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' })
     }
   }
 
@@ -94,10 +95,30 @@ class AddDoctor extends Component {
     }));
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
     event.target.reset();
-    if (this.props.onSubmit) this.props.onSubmit(this.state.doctor, 'https://myhealthapp-backend.herokuapp.com/api/health-services/doctors');
+    try {
+      await axios.post('https://myhealthapp-backend.herokuapp.com/api/health-services/doctors', this.state.doctor);
+      window.scrollTo({ top: 0, behavior: 'smooth'});
+      this.setState({ alertColor: 'success', isAlertVisible: true, alertMessage: 'Doctor creado con éxito' });
+    } catch (error) {
+      let message = 'Error al crear nuevo doctor: ';
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        message = message.concat(`Mensaje del servidor: ${error.response.statusText}`);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        message = message.concat('No pudo establecerse comunicación con el servidor.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        message = message.concat('No pudo realizarse el pedido al servidor');
+      }
+      this.setState({ isAlertVisible: true, alertMessage: message });
+    }
   };
 
   handleChange = (event) => {
@@ -113,8 +134,8 @@ class AddDoctor extends Component {
   render() {
     return (
       <div>
-        <Alert color="danger" isOpen={this.state.isFailAlertVisible} name="isFailAlertVisible" toggle={() => this.handleAlertDismiss("isFailAlertVisible")}>
-          {this.state.failAlertMessage}
+        <Alert color={this.state.alertColor} isOpen={this.state.isAlertVisible} name="isAlertVisible" toggle={() => this.handleAlertDismiss("isAlertVisible")}>
+          {this.state.alertMessage}
         </Alert>
         <Card>
           <CardHeader>
