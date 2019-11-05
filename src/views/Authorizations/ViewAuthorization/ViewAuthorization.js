@@ -24,6 +24,36 @@ class ViewAuthorization extends Component {
             alertColor: '',
             isAlertVisible: false,
             alertMessage: '',
+            authorization: {
+                "id": 6,
+                "created_by": {
+                    "dni": 1,
+                    "plan": 1,
+                    "first_name": "Diego",
+                    "last_name": "Armando",
+                    "password": null,
+                    "blocked": false,
+                    "mail": "diego@mail.com",
+                    "token": "",
+                    "lat": -33,
+                    "lon": -43.2
+                },
+                "created_for": {
+                    "dni": 1,
+                    "plan": 1,
+                    "first_name": "Diego",
+                    "last_name": "Armando",
+                    "password": null,
+                    "blocked": false,
+                    "mail": "diego@mail.com",
+                    "token": "",
+                    "lat": -33,
+                    "lon": -43.2
+                },
+                "created_at": "2019-10-29T00:36:01.813Z",
+                "status": "PENDIENTE",
+                "title": "Ortodoncia adultos"
+            }
         };
     }
 
@@ -74,21 +104,17 @@ class ViewAuthorization extends Component {
                                 <Col md="3">
                                     <Label htmlFor="select">Creada por</Label>
                                 </Col>
-                                <Col xs="12" md="9">
                                     <Col xs="12" md="9">
-                                        <Input type="text" id="created-by-input" name="created-by" disabled={true} value={this.state.authorization.created_by.dni + this.state.authorization.created_by.first_name + this.state.authorization.created_by.last_name} onChange={this.handleChange} />
-                                    </Col>
+                                        <Input type="text" id="created-by-input" name="created-by" disabled={true} value={`${this.state.authorization.created_by.dni} - ${this.state.authorization.created_by.first_name} ${this.state.authorization.created_by.last_name}`} onChange={this.handleChange} />
                                 </Col>
                             </FormGroup>
                             {this.state.authorization.created_for && <FormGroup row>
                                 <Col md="3">
                                     <Label htmlFor="select">Creada para</Label>
                                 </Col>
-                                <Col xs="12" md="9">
                                     <Col xs="12" md="9">
-                                        <Input type="text" id="created-for-input" name="created-for" disabled={true} value={this.state.authorization.created_for.dni + this.state.authorization.created_for.first_name + this.state.authorization.created_for.last_name} onChange={this.handleChange} />
+                                        <Input type="text" id="created-for-input" name="created-for" disabled={true} value={`${this.state.authorization.created_for.dni} - ${this.state.authorization.created_for.first_name} ${this.state.authorization.created_for.last_name}`} onChange={this.handleChange} />
                                     </Col>
-                                </Col>
                             </FormGroup>}
                         </Form>
                     </CardBody>
