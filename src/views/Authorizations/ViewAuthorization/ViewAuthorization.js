@@ -98,6 +98,12 @@ class ViewAuthorization extends Component {
         this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: message });
     };
 
+    handleChange = (event) => {
+        const authorization = { ...this.state.authorization };
+        authorization[event.target.name] = event.target.value
+        this.setState({ authorization });
+    };
+
     render() {
         return (
             <div>
