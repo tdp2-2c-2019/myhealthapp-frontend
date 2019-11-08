@@ -137,7 +137,7 @@ class ViewAuthorization extends Component {
                                     <Label htmlFor="procedure-input">Tipo de procedimiento</Label>
                                 </Col>
                                 <Col xs="12" md="9">
-                                    <Input type="text" id="procedur-input" name="procedure" disabled={true} value={this.state.authorization.type} onChange={this.handleChange} />
+                                    <Input type="text" id="procedure-input" name="procedure" disabled={true} value={this.state.authorization.type} onChange={this.handleChange} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
