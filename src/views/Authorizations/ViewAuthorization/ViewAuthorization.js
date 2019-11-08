@@ -62,7 +62,7 @@ class ViewAuthorization extends Component {
         event.preventDefault();        
         event.target.reset();
         try {
-            await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, this.state.authorization);
+            await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, { ...this.state.authorization, status: 'APROBADO', note: '' });
             window.scrollTo({ top: 0, behavior: 'smooth' });
             this.setState({ alertColor: 'success', isAlertVisible: true, alertMessage: 'Autorización aprobada con éxito' });
         } catch (error) {
@@ -72,7 +72,7 @@ class ViewAuthorization extends Component {
 
     handleDenial = async () => {
         try {
-            await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, this.state.authorization);
+            await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, {...this.state.authorization, status: 'RECHAZADO'});
             window.scrollTo({ top: 0, behavior: 'smooth' });
             this.setState({ alertColor: 'success', isAlertVisible: true, alertMessage: 'Autorización rechazada con éxito' });
         } catch (error) {
@@ -134,10 +134,10 @@ class ViewAuthorization extends Component {
                             </FormGroup>
                             <FormGroup row>
                                 <Col md="3">
-                                    <Label htmlFor="status-input">Tipo de procedimiento</Label>
+                                    <Label htmlFor="procedure-input">Tipo de procedimiento</Label>
                                 </Col>
                                 <Col xs="12" md="9">
-                                    <Input type="text" id="status-input" name="procedure" disabled={true} value={this.state.authorization.type} onChange={this.handleChange} />
+                                    <Input type="text" id="procedure-input" name="procedure" disabled={true} value={this.state.authorization.type} onChange={this.handleChange} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
