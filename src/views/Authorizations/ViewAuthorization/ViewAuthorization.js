@@ -62,7 +62,7 @@ class ViewAuthorization extends Component {
         event.preventDefault();        
         event.target.reset();
         try {
-            await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, { ...this.state.authorization, status: 'APROBADO' });
+            await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, { ...this.state.authorization, status: 'APROBADO', note: '' });
             window.scrollTo({ top: 0, behavior: 'smooth' });
             this.setState({ alertColor: 'success', isAlertVisible: true, alertMessage: 'Autorización aprobada con éxito' });
         } catch (error) {
