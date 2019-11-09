@@ -55,8 +55,20 @@ export default {
     },
     {
       name: 'Autorizaciones',
-      url: '/authorizations/list',
+      url: '/authorizations',
       icon: 'icon-drawer',
+      children: [
+        {
+          name: 'Aprobaciones',
+          url: '/authorizations/list',
+          icon: 'icon-list',
+        },
+        {
+          name: 'Tipos',
+          url: '/authorizations/types',
+          icon: 'icon-puzzle',
+        },
+      ],
     },
     // {
     //   name: 'Base',
