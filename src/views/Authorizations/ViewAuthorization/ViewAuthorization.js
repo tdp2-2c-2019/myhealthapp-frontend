@@ -72,9 +72,13 @@ class ViewAuthorization extends Component {
 
     handleDenial = async () => {
         try {
-            await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, {...this.state.authorization, status: 'RECHAZADO'});
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            this.setState({ alertColor: 'success', isAlertVisible: true, alertMessage: 'Autorización rechazada con éxito' });
+            if (this.state.authorization.note === null || this.state.authorization.note === undefined || this.state.authorization.note === "") {
+                this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'El mensaje de observación es requerido al rechazar' });
+            } else {
+                await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, { ...this.state.authorization, status: 'RECHAZADO' });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                this.setState({ alertColor: 'success', isAlertVisible: true, alertMessage: 'Autorización rechazada con éxito' });
+            }
         } catch (error) {
             this.handleErrorOnSubmit(error);
         };
