@@ -62,7 +62,7 @@ class ViewAuthorization extends Component {
         event.preventDefault();        
         event.target.reset();
         try {
-            await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, { ...this.state.authorization, status: 'APROBADO', note: '' });
+            await axios.put(`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.authorization.id}`, { ...this.state.authorization, status: 'APROBADO' });
             window.scrollTo({ top: 0, behavior: 'smooth' });
             this.setState({ alertColor: 'success', isAlertVisible: true, alertMessage: 'Autorización aprobada con éxito' });
         } catch (error) {
@@ -173,7 +173,7 @@ class ViewAuthorization extends Component {
                                     <Label htmlFor="select">Observación</Label>
                                 </Col>
                                 <Col xs="12" md="9">
-                                    <Input type="text" id="note-input" name="note" value={this.state.authorization.note} onChange={this.handleChange} />
+                                    <Input type="text" id="note-input" name="note" value={this.state.authorization.note} onChange={this.handleChange} required />
                                 </Col>
                             </FormGroup>
                         </Form>
