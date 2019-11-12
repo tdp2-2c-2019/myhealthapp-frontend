@@ -58,6 +58,11 @@ export default {
       url: '/authorizations/list',
       icon: 'icon-drawer',
     },
+    {
+      name: 'Métricas',
+      url: '/metrics',
+      icon: 'icon-pie-chart',
+    },
     // {
     //   name: 'Base',
     //   url: '/base',

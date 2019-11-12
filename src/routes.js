@@ -7,6 +7,7 @@ const AddHealthService = React.lazy(() => import('./views/HealthServices/AddHeal
 const ListHealthServices = React.lazy(() => import('./views/HealthServices/ListHealthServices'));
 const ListAuthorizations = React.lazy(() => import('./views/Authorizations/ListAuthorizations'));
 const ViewAuthorization = React.lazy(() => import('./views/Authorizations/ViewAuthorization'));
+const Metrics = React.lazy(() => import('./views/Metrics'));
 const Breadcrumbs = React.lazy(() => import('./views/Base/Breadcrumbs'));
 const Cards = React.lazy(() => import('./views/Base/Cards'));
 const Carousels = React.lazy(() => import('./views/Base/Carousels'));
@@ -52,6 +53,7 @@ const routes = [
   { path: '/hospitals/:id', name: 'Centro de salud', component: AddHospital },
   { path: '/authorizations/list', name: 'Autorizaciones', component: ListAuthorizations },
   { path: '/authorizations/:id', name: 'Autorización', component: ViewAuthorization },
+  { path: '/metrics', name: 'Métricas', component: Metrics },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },
