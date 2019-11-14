@@ -1,0 +1,6 @@
+{
+    "name": "AddAuthorizationType",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./AddAuthorizationType.js"
+}
