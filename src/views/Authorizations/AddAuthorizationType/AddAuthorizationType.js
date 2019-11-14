@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {
     Alert,
     Button,
@@ -83,10 +84,10 @@ class AddAuthorizationType extends Component {
                         <Form id="authorization-type-form" className="form-horizontal" onSubmit={this.handleSubmit}>
                             <FormGroup row>
                                 <Col md="3">
-                                    <Label htmlFor="text-input">Titulo</Label>
+                                    <Label htmlFor="text-input">Título</Label>
                                 </Col>
                                 <Col xs="12" md="9">
-                                    <Input type="text" id="title-input" placeholder='Implante' name="title" value={this.state.type.title} onChange={this.handleChange} />
+                                    <Input type="text" id="title-input" placeholder='Implante' name="title" value={this.state.type.title} onChange={this.handleChange} required/>
                                 </Col>
                             </FormGroup>
                         </Form>
@@ -94,7 +95,11 @@ class AddAuthorizationType extends Component {
                     <CardFooter>
                         <Button type="submit" color="primary" form="authorization-type-form"><i className="fa fa-dot-circle-o" /> Guardar</Button>
                         {' '}
-                        <Button type='reset' color="danger" form="authorization-form"><i className="fa fa-ban" /> Cancelar</Button>
+                        <Link to='/authorizations/list'>
+                            <Button type='reset' color="danger" form="authorization-form"><i className="fa fa-ban" /> 
+                                Cancelar
+                            </Button>
+                        </Link>
                     </CardFooter>
                 </Card>
             </div>
