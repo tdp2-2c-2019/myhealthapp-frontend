@@ -49,33 +49,58 @@ class Metrics extends Component {
     this.state = {
       authorizationsApproved: [],
       authorizationsRejected: [],
-      line: {
-        labels: [...Array(30 + 1).keys()].slice(1),
-        datasets: [
-          {
-            label: "Aprobadas",
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(75,192,192,1)",
-            borderCapStyle: "butt",
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: "miter",
-            pointBorderColor: "rgba(75,192,192,1)",
-            pointBackgroundColor: "#fff",
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-            pointHoverBorderColor: "rgba(220,220,220,1)",
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [65, 59, 80, 81, 56, 55, 40]
-          }
-        ]
-      }
     }
+  }
+
+  getLine = () => {
+    const line = {
+      labels: this.state.authorized_count_per_day ? this.state.authorized_count_per_day.map(acpd => new Date(acpd.date).toLocaleDateString()) : [],
+      datasets: [
+        {
+          label: "Aprobadas",
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: "rgba(75,192,192,0.4)",
+          borderColor: "rgba(75,192,192,1)",
+          borderCapStyle: "butt",
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: "miter",
+          pointBorderColor: "rgba(75,192,192,1)",
+          pointBackgroundColor: "#fff",
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "rgba(75,192,192,1)",
+          pointHoverBorderColor: "rgba(220,220,220,1)",
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data: this.state.authorized_count_per_day ? this.state.authorized_count_per_day.map(acpd => acpd.status_count) : []
+        },
+        {
+          label: "Rechazadas",
+          fill: false,
+          lineTension: 0.1,
+          backgroundColor: "#FF6384",
+          borderColor: "#FF6384",
+          borderCapStyle: "butt",
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: "miter",
+          pointBorderColor: "#FF6384",
+          pointBackgroundColor: "#fff",
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "#FF6384",
+          pointHoverBorderColor: "#FF6384",
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data: this.state.rejected_count_per_day ? this.state.rejected_count_per_day.map(rcpd => rcpd.status_count) : []
+        }
+      ]
+    }
+    return line;
   }
 
   componentDidMount() {
@@ -98,16 +123,10 @@ class Metrics extends Component {
   getAuthorizationsData = async () => {
     // TODO: Build endpoint in back that groups by day from last 30days
     try {
-      const authorizationsReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/authorizations');
+      // const authorizationsReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/authorizations');
+      const authorizationsReq = await axios.get('http://localhost:8080/api/charts/authorizations');
       authorizationsReq.status === 200
-        ? this.setState({
-            authorizationsApproved: authorizationsReq.data.filter(
-              auth => auth.status === "APROBADO"
-            ),
-            authorizationsRejected: authorizationsReq.data.filter(
-              auth => auth.status === "RECHAZADO"
-            )
-          })
+        ? this.setState({...authorizationsReq.data})
         : this.setState({
             alertColor: "danger",
             isAlertVisible: true,
@@ -129,7 +148,7 @@ class Metrics extends Component {
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
-                <Line data={this.state.line} /*options={options}*/ />
+                <Line data={this.getLine()} /*options={options}*/ />
               </div>
             </CardBody>
           </Card>
