@@ -5,6 +5,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  CardSubtitle
 } from 'reactstrap';
 import {
   Line, Pie,
@@ -12,28 +13,6 @@ import {
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 
 const axios = require("axios");
-
-const pie = {
-  labels: [
-    'Red',
-    'Green',
-    'Yellow',
-  ],
-  datasets: [
-    {
-      data: [300, 50, 100],
-      backgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-      ],
-      hoverBackgroundColor: [
-        '#FF6384',
-        '#36A2EB',
-        '#FFCE56',
-      ],
-    }],
-};
 
 const options = {
   tooltips: {
@@ -47,14 +26,17 @@ class Metrics extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      authorizationsApproved: [],
-      authorizationsRejected: [],
+      authorized_count_per_day: [],
+      rejected_count_per_day: [],
+      counts_by_plan: [],
+      automatic_approved_count: 0,
+      manual_approved_count: 0,
     }
   }
 
   getLine = () => {
     const line = {
-      labels: this.state.authorized_count_per_day ? this.state.authorized_count_per_day.map(acpd => new Date(acpd.date).toLocaleDateString()) : [],
+      labels: this.state.authorized_count_per_day.map(acpd => new Date(acpd.date).toLocaleDateString()),
       datasets: [
         {
           label: "Aprobadas",
@@ -75,7 +57,7 @@ class Metrics extends Component {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: this.state.authorized_count_per_day ? this.state.authorized_count_per_day.map(acpd => acpd.status_count) : []
+          data: this.state.authorized_count_per_day.map(acpd => acpd.status_count)
         },
         {
           label: "Rechazadas",
@@ -96,11 +78,36 @@ class Metrics extends Component {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: this.state.rejected_count_per_day ? this.state.rejected_count_per_day.map(rcpd => rcpd.status_count) : []
+          data: this.state.rejected_count_per_day.map(rcpd => rcpd.status_count)
         }
       ]
     }
     return line;
+  }
+
+  getPie= () => {    
+    const pie = {
+      labels: [
+        'Plan 1',
+        'Plan 2',
+        'Plan 3',
+      ],
+      datasets: [
+        {
+          data: this.state.counts_by_plan.map(cbp => cbp.count),
+          backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+          ],
+          hoverBackgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+          ],
+        }],
+    };
+    return pie;
   }
 
   componentDidMount() {
@@ -109,11 +116,10 @@ class Metrics extends Component {
   }
 
   getAffiliatesData = async () => {
-    // TODO: Build endpoint in back
     try {
-      const affiliateReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/affiliates');
+      const affiliateReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/charts/affiliates');
       affiliateReq.status === 200 ?
-      this.setState({ affiliates: affiliateReq.data }) : 
+      this.setState({ counts_by_plan: affiliateReq.data }) : 
       this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' });
     } catch (error) {
       this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' });
@@ -121,10 +127,8 @@ class Metrics extends Component {
   }
 
   getAuthorizationsData = async () => {
-    // TODO: Build endpoint in back that groups by day from last 30days
     try {
-      // const authorizationsReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/authorizations');
-      const authorizationsReq = await axios.get('http://localhost:8080/api/charts/authorizations');
+      const authorizationsReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/charts/authorizations');
       authorizationsReq.status === 200
         ? this.setState({...authorizationsReq.data})
         : this.setState({
@@ -150,6 +154,11 @@ class Metrics extends Component {
               <div className="chart-wrapper">
                 <Line data={this.getLine()} /*options={options}*/ />
               </div>
+              <CardFooter>
+                <CardSubtitle style={{paddingBottom: '5px'}}>Automaticas: {this.state.automatic_approved_count}</CardSubtitle>
+                <CardSubtitle style={{ paddingBottom: '5px' }}>Manuales: {this.state.manual_approved_count}</CardSubtitle>
+                <CardSubtitle>Total: {parseInt(this.state.manual_approved_count) + parseInt(this.state.automatic_approved_count)}</CardSubtitle>
+              </CardFooter>
             </CardBody>
           </Card>
           <Card>
@@ -158,8 +167,11 @@ class Metrics extends Component {
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
-                <Pie data={pie} />
+                <Pie data={this.getPie()} />
               </div>
+              <CardFooter>
+                <CardSubtitle>Total: {this.state.counts_by_plan.reduce((total, cbp) => {return total + parseInt(cbp.count)}, 0)}</CardSubtitle>
+              </CardFooter>
             </CardBody>
           </Card>
         </CardColumns>
