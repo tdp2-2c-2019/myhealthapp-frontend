@@ -155,7 +155,7 @@ class Metrics extends Component {
                 <Line data={this.getLine()} /*options={options}*/ />
               </div>
               <CardFooter>
-                <CardSubtitle style={{paddingBottom: '5px'}}>Automaticas: {this.state.automatic_approved_count}</CardSubtitle>
+                <CardSubtitle style={{paddingBottom: '5px'}}>Automáticas: {this.state.automatic_approved_count}</CardSubtitle>
                 <CardSubtitle style={{ paddingBottom: '5px' }}>Manuales: {this.state.manual_approved_count}</CardSubtitle>
                 <CardSubtitle>Total: {parseInt(this.state.manual_approved_count) + parseInt(this.state.automatic_approved_count)}</CardSubtitle>
               </CardFooter>
