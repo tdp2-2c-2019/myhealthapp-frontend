@@ -9,6 +9,7 @@ const ListAuthorizations = React.lazy(() => import('./views/Authorizations/ListA
 const ListAuthorizationTypes = React.lazy(() => import('./views/Authorizations/ListAuthorizationTypes'));
 const AddAuthorizationType = React.lazy(() => import('./views/Authorizations/AddAuthorizationType'));
 const ViewAuthorization = React.lazy(() => import('./views/Authorizations/ViewAuthorization'));
+const Metrics = React.lazy(() => import('./views/Metrics'));
 const Breadcrumbs = React.lazy(() => import('./views/Base/Breadcrumbs'));
 const Cards = React.lazy(() => import('./views/Base/Cards'));
 const Carousels = React.lazy(() => import('./views/Base/Carousels'));
@@ -56,6 +57,7 @@ const routes = [
   { path: '/authorizations/types/new', name: 'Agregar tipo de autorización', component: AddAuthorizationType },
   { path: '/authorizations/types', name: 'Tipos de Autorizaciones', component: ListAuthorizationTypes },
   { path: '/authorizations/:id', name: 'Autorización', component: ViewAuthorization },
+  { path: '/metrics', name: 'Métricas', component: Metrics },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },

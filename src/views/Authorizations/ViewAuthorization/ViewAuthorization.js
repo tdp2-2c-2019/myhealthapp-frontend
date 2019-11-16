@@ -51,7 +51,6 @@ class ViewAuthorization extends Component {
         } catch (error) {
             this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' });
         }
-        
     }
 
     handleAlertDismiss = (alertName) => {

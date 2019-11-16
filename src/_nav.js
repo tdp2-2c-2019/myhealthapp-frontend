@@ -70,6 +70,11 @@ export default {
         },
       ],
     },
+    {
+      name: 'Métricas',
+      url: '/metrics',
+      icon: 'icon-pie-chart',
+    },
     // {
     //   name: 'Base',
     //   url: '/base',
