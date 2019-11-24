@@ -8,18 +8,45 @@ import {
   CardSubtitle
 } from 'reactstrap';
 import {
-  Line, Pie,
+  Chart, Line, Pie,
 } from 'react-chartjs-2';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 
 const axios = require("axios");
 
-const options = {
+const optionsForPieChart = {
   tooltips: {
-    enabled: false,
-    custom: CustomTooltips,
+    enabled: true,
+    callbacks: {
+      // this callback is used to create the tooltip label
+      label: function (tooltipItem, data) {
+        // get the data label and data value to display
+        // convert the data value to local string so it uses a comma seperated number
+        let dataLabel = ['Cantidad', 'Porcentaje'];
+        const rawNumberValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+        const value = ': ' + rawNumberValue.toLocaleString();
+        const totalValue = data.datasets[0].data.reduce((total, value) => { return total + parseInt(value) }, 0);        
+
+        // make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ], [etc...]])
+        if (Chart.helpers.isArray(dataLabel)) {
+          // show value on first line of multiline label
+          // need to clone because we are changing the value
+          dataLabel = dataLabel.slice();
+          dataLabel[0] += value;
+          dataLabel[1] += `: ${((rawNumberValue/totalValue).toFixed(2))}%`;
+        } else {
+          dataLabel += value;
+        }
+
+        // return the text to display on the tooltip
+        return dataLabel;
+      }
+    }
   },
-  maintainAspectRatio: false,
+  legend: {
+    display: true,
+  },
+  maintainAspectRatio: true,
 };
 
 class Metrics extends Component {
@@ -152,7 +179,7 @@ class Metrics extends Component {
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
-                <Line data={this.getLine()} /*options={options}*/ />
+                <Line data={this.getLine()}/>
               </div>
               <CardFooter>
                 <CardSubtitle style={{paddingBottom: '5px'}}>Automáticas: {this.state.automatic_approved_count}</CardSubtitle>
@@ -167,7 +194,7 @@ class Metrics extends Component {
             </CardHeader>
             <CardBody>
               <div className="chart-wrapper">
-                <Pie data={this.getPie()} />
+                <Pie data={this.getPie()}  options={optionsForPieChart} />
               </div>
               <CardFooter>
                 <CardSubtitle>Total: {this.state.counts_by_plan.reduce((total, cbp) => {return total + parseInt(cbp.count)}, 0)}</CardSubtitle>
