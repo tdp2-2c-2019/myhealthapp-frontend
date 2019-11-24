@@ -74,7 +74,7 @@ class ListAuthorizations extends Component {
                                     <th>Creada por</th>
                                     <th>Creada para</th>
                                     <th>Fecha de creación</th>
-                                    <th>Status</th>
+                                    <th>Estado</th>
                                     <th></th>
                                 </tr>
                             </thead>
