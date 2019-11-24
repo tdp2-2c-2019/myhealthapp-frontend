@@ -1,1 +1,44 @@
 // Here you can add other styles
+
+$primary-color: #116DB6;
+$secondary-color: #F26600;
+$secondary-selected-color: #d65d05;
+
+.sidebar {
+    background: $primary-color;
+    .nav-link:hover {
+        background: $secondary-color;
+    }
+    .nav-link.active {
+        background: $secondary-selected-color;
+    }
+}
+
+.btn-link {
+    color: $secondary-color;
+}
+
+a {
+    color: $secondary-color
+}
+
+.page-item.active {
+    .page-link {
+    background-color: $secondary-color;
+    border-color: $secondary-color;
+    }
+}
+
+.page-link {
+    color: $primary-color;
+}
+
+.btn-primary {
+    background-color: $primary-color;
+    border-color: $primary-color;
+}
+
+.sidebar-minimized .sidebar .sidebar-minimizer {
+    background-color: $primary-color;
+    background: rgba($color: #000000, $alpha: 0.2);
+}
