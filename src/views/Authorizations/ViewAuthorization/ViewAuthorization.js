@@ -172,7 +172,7 @@ class ViewAuthorization extends Component {
                                     <Label htmlFor="select">Observación</Label>
                                 </Col>
                                 <Col xs="12" md="9">
-                                    <Input type="text" id="note-input" name="note" value={this.state.authorization.note} onChange={this.handleChange} required />
+                                    <Input type="text" id="note-input" name="note" value={this.state.authorization.note} onChange={this.handleChange} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
