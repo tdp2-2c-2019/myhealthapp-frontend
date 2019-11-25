@@ -10,7 +10,6 @@ import {
 import {
   Chart, Line, Pie,
 } from 'react-chartjs-2';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 
 const axios = require("axios");
 

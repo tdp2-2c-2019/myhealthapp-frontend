@@ -175,6 +175,14 @@ class ViewAuthorization extends Component {
                                     <Input type="text" id="note-input" name="note" value={this.state.authorization.note} onChange={this.handleChange} required />
                                 </Col>
                             </FormGroup>
+                            <FormGroup row>
+                                <Col md="3">
+                                    <Label>Adjunto</Label>
+                                </Col>
+                                <Col xs="12" md="9">
+                                    <img src={`https://myhealthapp-backend.herokuapp.com/api/authorizations/${this.state.id}/photo`} alt="No hay imagen adjunta asociada" style={{ maxHeight: '300px' }}></img>
+                                </Col>
+                            </FormGroup>
                         </Form>
                     </CardBody>
                     <CardFooter>
