@@ -63,6 +63,7 @@ class ListAuthorizationTypes extends Component {
                                 <tr>
                                     <th>ID</th>
                                     <th>Tipo</th>
+                                    <th>Plan mínimo de aprobación automática</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,6 +73,7 @@ class ListAuthorizationTypes extends Component {
                                             <tr key={type.id}>
                                                 <td>{type.id}</td>
                                                 <td>{type.title}</td>
+                                                <td>{type.minimum_plan}</td>
                                             </tr>
                                         )
                                     })}
