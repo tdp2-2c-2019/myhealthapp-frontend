@@ -26,8 +26,21 @@ class AddAuthorizationType extends Component {
             type: {
                 id: 0,
                 title: '',
-            }
+                minimum_plan: 1,
+            },
+            plans: [],
         };
+    }
+
+    async componentDidMount() {
+        try {
+        const plansReq = await axios.get('https://myhealthapp-backend.herokuapp.com/api/plans');
+        plansReq.status === 200 ?
+        this.setState({ plans: plansReq.data}) :
+        this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' });
+        } catch(error) {
+            this.setState({ alertColor: 'danger', isAlertVisible: true, alertMessage: 'No pudo establecerse una conexión con el servidor, intente más tarde.' })   
+        }
     }
 
     handleAlertDismiss = (alertName) => {
@@ -88,6 +101,17 @@ class AddAuthorizationType extends Component {
                                 </Col>
                                 <Col xs="12" md="9">
                                     <Input type="text" id="title-input" placeholder='Implante' name="title" value={this.state.type.title} onChange={this.handleChange} required/>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Col md="3">
+                                    <Label htmlFor="text-input">Plan mínimo de aprobación automática</Label>
+                                </Col>
+                                <Col xs="12" md="9">
+                                    <Input type="select" name="minimum_plan" id="minimum-plan-select" required value={this.state.type.minimum_plan} onChange={this.handleChange}>
+                                        <option value="0" disabled>Elija el plan mínimo</option>
+                                        {this.state.plans && this.state.plans.map(plan => <option key={`plan${plan.plan}`} value={plan.plan}>{plan.plan_name}</option>)}
+                                    </Input>
                                 </Col>
                             </FormGroup>
                         </Form>
