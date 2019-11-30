@@ -101,7 +101,7 @@ class AddDoctor extends Component {
     try {
       await axios.post('https://myhealthapp-backend.herokuapp.com/api/health-services/doctors', this.state.doctor);
       window.scrollTo({ top: 0, behavior: 'smooth'});
-      this.setState({ alertColor: 'success', isAlertVisible: true, alertMessage: 'Doctor creado con éxito' });
+      this.setState({ alertColor: 'success', isAlertVisible: true, alertMessage: 'Doctor guardado con éxito' });
     } catch (error) {
       let message = 'Error al crear nuevo doctor: ';
       if (error.response) {
